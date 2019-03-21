@@ -1,0 +1,128 @@
+.table {
+    border-spacing: 0;
+    border-collapse: collapse;
+    white-space: nowrap;
+    table-layout: fixed;
+    border: solid 1px darkgrey;
+}
+
+.table th {
+    background-color: lightgray;
+    color: black;
+    text-align: center;
+    padding: 5px;
+    font-size: 12px;
+    border-right: solid 1px darkgray;
+    border-bottom: solid 1px darkgray;
+}
+
+.table th:last-child {
+    border-right: none;
+}
+
+.table th:hover {
+    background-color: darkgrey;
+    cursor: pointer;
+    cursor: hand;
+}
+
+.table tr {
+    background-color: white;
+}
+
+.table tr:nth-child( even ) {
+    background-color: whitesmoke;
+}
+
+.table td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    padding: 5px;
+    border-right: solid 1px darkgray;
+}
+
+.table td:last-child {
+    border-right: none;
+}
+
+.table_header_field {
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.page_size_box {
+    float: left;
+    vertical-align: middle;
+}
+
+.page_number_box {
+    float: left;
+    vertical-align: middle;
+}
+
+.page_size {
+    padding: 10px 1px;
+    font-size: 16px;
+    border: solid 1px lightblue;
+    border-radius: 3px;    
+}
+
+.table_header_field {
+    margin-bottom: 3px;
+    vertical-align: middle;
+}
+
+.pager {
+    margin-top: 3px;
+}
+
+.count_info {
+    margin-top: 15px;
+    float: right;
+}
+
+.page_buttons {
+    margin-left: 20px;
+    float: right;
+}
+
+.inner {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.page_button {
+    width: auto;
+    margin: 0;
+    min-width: 30px;
+    background-color: white;
+    border: solid 1px lightblue;
+    color: darkcyan;
+    border-radius: 2px;
+    padding: 5px;
+}
+
+.operation_button {
+    width: auto;
+    margin: 0;
+    min-width: 30px;
+    background-color: white;
+    color: darkcyan;
+    padding: 5px;
+    border: none;
+}
+
+.table_icon {
+    font-size: 20;
+    padding: 3px;
+}
+
+.table_message {
+    margin: 30px 50px;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
+}

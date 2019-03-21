@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<html>
+  {{ include( "head.html" ) }} 
+  <body>
+    <header class="header">
+      <div class="component">
+        <div style="float: left;">
+          <a href="https://jpostdb.org/" class="header_logo">
+            <img src="images/logo.svg" />
+          </a>
+          <a href="/" class="header_title title_link">
+            <h1>jPOSTdb</h1>
+          </a>
+        </div>
+        <div style="float: left; margin-left: 30px;">
+          <a href="javascript:jpost.openTab( 'search' )" class="top_menu">Search</a>
+          <a href="javascript:jpost.openTab( 'slice' )" class="top_menu">Slice</a>
+          <a href="javascript:jpost.openTab( 'compare' )" class="top_menu">Compare</a>
+          <a href="javascript:jpost.openTab( 'help' )" class="top_menu">Help</a>
+          <div both="clear: both;"></div>
+        </div>
+        <div style="clear: both;"></div>
+      </div>
+    </header>
+    <article class="main">
+      <div class="component main">
+        <div id="search_panel" class="main_tab_field">
+            {{ include( "search.html" ) }}
+        </div>
+        <div id="slice_panel" class="main_tab_field">slice</div>
+        <div id="compare_panel" class="main_tab_field">compare</div>
+        <div id="help_panel" class="main_tab_field">help</div>
+      </div>
+    </article>
+    <script>
+        jpost.openTab( 'search' );
+    </script>
+    {{ include( "footer.html" ) }}
+    {{ include( "dialogs.html" ) }}
+  </body>
+</html>

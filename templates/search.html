@@ -1,0 +1,37 @@
+<div>
+  <div>
+    {{ include( "filter.html" ) }}
+  </div>
+  <div class="information_pane">
+    <div class="tab_buttons_line">
+      <button id="global_dataset_tab_button" class="global_tab_button tab_button tab_active">Dataset</button>
+      <button id="global_protein_tab_button" class="global_tab_button tab_button">Protein</button>
+      <button class="fill_blank"></button>
+      <div style="clear: both;"></div>      
+      <script>
+        $( '#global_dataset_tab_button' ).click( 
+            function() {
+                jpost.changeTabPanel( 'global_dataset', 'global' );
+            }
+        );
+        $( '#global_protein_tab_button' ).click( 
+            function() {
+                jpost.changeTabPanel( 'global_protein', 'global' );
+            }
+        );
+      </script>
+    </div>
+    <div id="global_dataset_tab_pane" class="tab_pane global_tab_pane">
+      <div id="datasets" class="information_table"></div>
+    </div>
+    <script>
+      jpost.createGlobalDatasetTable( 'datasets' );
+    </script>
+    <div id="global_protein_tab_pane" class="tab_pane global_tab_pane" style="display: none;">
+      <div id="proteins" class="information_table"></div>
+    </div>
+    <script>
+      jpost.createGlobalProteinTable( 'proteins' );
+    </script>
+  </div>
+</div>

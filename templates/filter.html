@@ -1,0 +1,23 @@
+<div>
+    <div id="filter_pane">
+      <button id="filter_title_button">
+        Filter
+        <span id="filter_title_icon" class="fas fa-caret-up"></span>
+      </button>
+      <div id="filter_body">
+        <form id="filter_form">
+        </form>
+        <button id="form_add_button" style="width: 50px">+</button>
+        <div id="filter_chart_wrapper">
+          <div id="filter_chart"></div>
+          <div style="clear: both;"></div>
+        </div>      
+        <script>
+          $( '#form_add_button' ).click( jpost.addForm );
+        </script>
+      </div>    
+    </div>
+    <script>
+      jpost.prepareFilter();
+    </script>
+  </div>

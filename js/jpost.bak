@@ -1,0 +1,524 @@
+// dummy object for the namespace
+var jpost = {};
+
+// slices
+jpost.slices = [
+];
+
+// ecluded datasets
+jpost.excludedDatasets = [
+];
+
+// current slice
+jpost.slice = null;
+
+
+jpost.slice1 = null;
+jpost.slice2 = null;
+
+// filter
+jpost.filters = [
+    { title: 'Species',      name: 'species' },
+    { title: 'Sample type',  name: 'sampleType' },
+    { title: 'Cell line',    name: 'cellLine' },
+    { title: 'Organ',        name: 'organ' },
+    { title: 'Disease',      name: 'disease' },
+    { title: 'Modification', name: 'modification' },
+    { title: 'Instrument',   name: 'instrument' }
+];
+
+// get slice
+jpost.findSlice = function( id ) {
+    var dataset = null;
+    jpost.slices.forEach(
+        function( tmp ) {
+            if( tmp.id == id ) {
+                dataset = tmp;
+            }
+        }
+    );
+    return dataset;
+}
+
+// issue slice ID
+jpost.issueSliceId = function() {
+    var id = 0;
+    jpost.slices.forEach(
+        function( slice ) {
+            if( slice.id > id ) {
+                id = slice.id;
+            }
+        }
+    );
+    return ( id + 1 );
+}
+
+// load slice
+jpost.load = function() {
+    var string = localStorage.getItem( 'jPOST_SLICES' );
+    if( string === null ) {
+        jpost.slices = [];
+    }
+    else {
+        jpost.slices = JSON.parse( string );
+    }
+
+    string = localStorage.getItem( 'jPOST_SLICE_NAME' );
+    jpost.slice = null;
+    jpost.slices.forEach( 
+        function( slice ) {
+            if( slice.name == string ) {
+                jpost.slice = slice;
+            }
+        }
+    );
+
+    string = localStorage.getItem( 'jPOST_EXCLUDED_DATASETS' );
+    if( string === null ) {
+        jpost.excludedDatasets = [];
+    }
+    else {
+        jpost.excludedDatasets = JSON.parse( string );
+    }
+}
+
+// save slice
+jpost.save = function() {
+    var string = null;
+    if( jpost.slices !== null ) {
+        string = JSON.stringify( jpost.slices );
+    }
+    localStorage.setItem( 'jPOST_SLICES', string );
+
+    string = null;
+    if( jpost.slice !== null ) {
+        string = jpost.slice.name;
+    }
+    localStorage.setItem( 'jPOST_SLICE_NAME', string );
+
+    string = null;
+    if( jpost.excludedDatasets !== null ) {
+        string = JSON.stringify( jpost.excludedDatasets );    
+    }
+    localStorage.setItem( 'jPOST_EXCLUDED_DATASETS', string );
+}
+
+// update tabs
+jpost.updateTabs = function() {
+    $( '#tab_field' ).html( '' );
+    var tab = '<a class="tab_link title_link globe_link" ';
+    if( jpost.slice === null ) {
+        tab = '<a class="tab_link title_link globe_link active_tab_link" '
+    }
+    tab = tab + 'href="javascript:jpost.selectSlice( null )"><div>Globe</div></a>';
+    $( '#tab_field' ).append( tab );
+
+    jpost.slices.forEach(
+        function( slice ) {
+            tab = '<a class="tab_link title_link" ';
+            if( slice === jpost.slice ) {
+                tab = '<a class="tab_link title_link active_tab_link" ';
+            }
+            tab = tab + 'href="javascript:jpost.selectSlice( ' + slice.id + '  )"><div>' + slice.name
+                + '</div><div><input type="checkbox" class="slice_tab_check" name="slices[]" value="' + slice.id + '" /></div></a>';
+            $( '#tab_field' ).append( tab );
+        }
+    );
+    $( '#tab_field' ).append( '<a class="tab_link title_link tab_link_short"><div>+</div></a>' );
+    $( '#tab_field' ).append( '<button id="compare_button">Compare</button>' );
+    $( '#compare_button' ).click( jpost.compareSlices );
+}
+
+
+
+
+// create protein table
+jpost.createGlobalProteinTable = function( id ) {
+    table.createTable(
+        id,
+        {
+            url: '/proteins',
+            columns: jpost.getProteinColumns(),
+            parameters: function() {
+                var params = jpost.getFilterParameters();
+                var slice = jpost.slice;
+                if( slice == null ) {
+                    params[ 'excluded_datasets' ] = jpost.excludedDatasets;
+                }
+                else {
+                    datasets = slice.datasets;
+                    if( datasets.length == 0 ) {
+                        datasets = [ 'nothing' ];
+                    }
+                    params[ 'datasets' ] = datasets;
+                }
+                return params;                
+            }
+        }
+    );
+}
+
+
+// create dataset protein table
+jpost.createDatasetPeptideTable = function( id, dataset ) {
+    table.createTable(
+        id,
+        {
+            url: '/peptides',
+            columns: jpost.getPeptideColumns(),
+            parameters: function() {
+                return { datasets: [ dataset ] };
+            }
+        }
+    );
+}
+
+// create protein peptide table
+jpost.createProteinPeptideTable = function( id, protein ) {
+    table.createTable(
+        id,
+        {
+            url: '/peptides',
+            columns: jpost.getPeptideColumns(),
+            parameters: function() {
+                return { proteins: [ protein ] };
+            }
+        }
+    );
+}
+
+// get peptide columns
+jpost.getPeptideColumns = function() {
+    var columns = [
+        {
+            title: 'ID',
+            field: 'peptide_id',
+            format: function( peptide ) {
+                var id = peptide.peptide_id;
+                var url = '/peptide/' + id;
+                var tag = '<a href="' + url + '">' + id + '</a>';
+                return tag;
+            },
+            width: 250
+        },
+        {
+            title: 'Dataset ID',
+            field: 'dataset_id',
+            format: function( peptide ) {
+                var url = 'dataset/' + peptide.dataset_id;
+                var tag = '<a href="' + url + '">' + peptide.dataset_id + '</a>';
+                return tag;
+            },
+            width: 200
+        },
+        {
+            title: 'Protein Name',
+            field: 'full_name',
+            format: function( peptide ) {
+                var url = '/protein/' + peptide.accession;
+                var tag = '<a href="' + url + '">' + peptide.full_name + '</a>';
+                return tag;
+            },
+            width: 350
+        },
+        {
+            title: 'Accession',
+            field: 'accession',
+            format: function( peptide ) {
+                var accession = peptide.accession;
+                var url = 'https://www.uniprot.org/uniprot/' + accession;
+                var tag = '<a href="' + url + '">' + accession + '</a>';
+                return tag;
+            },
+            width: 180
+        },
+        {
+            title: 'Protein ID',
+            field: 'mnemonic',
+            width: 180
+        },
+        {
+            title: 'Sequence',
+            field: 'sequence',
+            width: 350,
+        }
+    ];
+    return columns;
+}
+
+// create protein peptide table
+jpost.createProteinPsmTable = function( id, protein ) {
+    table.createTable(
+        id,
+        {
+            url: '/psms',
+            columns: jpost.getPsmColumns(),
+            parameters: function() {
+                return { proteins: [ protein ] };
+            }
+        }
+    );
+}
+
+// get psm columns
+jpost.getPsmColumns = function() {
+    var columns = [
+        {
+            title: 'ID',
+            field: 'psm_id',
+            width: 200,
+        },
+        {
+            title: 'jPOST Score',
+            field: 'jpost_score',
+            width: 120,
+            align: 'right'
+        },
+        {
+            title: 'Charge',
+            field: 'charge',
+            width: 100,
+            align: 'right'
+        }, 
+        {
+            title: 'Calculated Mass',
+            field: 'calc_mass',
+            width: 200,
+            align: 'right'
+        },
+        {
+            title: 'Experimental Mass',
+            field: 'exp_mass',
+            width: 200,
+            align: 'right'
+        },
+        {
+            title: 'Sequence',
+            field: 'sequence',
+            width: 350,
+        }
+    ];
+    return columns;
+}
+
+// get checked datasets
+jpost.getCheckedDatasets = function() {
+    var array = [];
+    $( '[class="dataset_check"]:checked' ).map(
+        function() {
+            array.push( $( this ).val() );
+        }
+    );
+    return array;
+}
+
+// get checked slices
+jpost.getCheckedSlices = function() {
+    var array = [];
+    $( '[class="slice_tab_check"]:checked' ).map(
+        function() {
+            array.push( $( this ).val() );
+        }
+    );
+
+    slices = [];
+    array.forEach(
+        function( id ) {
+            var slice = jpost.findSlice( id );
+            if( slice !== null ) {
+                slices.push( slice );
+            }
+        }
+    );
+    return slices;
+}
+
+// operate datasets
+jpost.operateDatasets = function() {
+    var datasets = jpost.getCheckedDatasets();
+    var operation = $( '#dataset_operatin_selection' ).val();
+
+    if( operation == 'hide') {
+        datasets.forEach(
+            function( dataset ) {
+                if( !( dataset in jpost.excludedDatasets ) ) {
+                    jpost.excludedDatasets.push( dataset );
+                }
+            }
+        );
+        jpost.save();
+        jpost.updateTables();
+    }
+    else if( operation == 'show' ) {
+        datasets.forEach(
+            function( dataset ) {
+                var index = jpost.excludedDatasets.indexOf( dataset );
+                if( index >= 0 ) {
+                    jpost.excludedDatasets.splice( index, 1 );
+                }
+            }
+        );
+        jpost.save();
+        jpost.updateTables();
+    }
+    else if( operation == 'add' ) {
+        jpost.updateSliceSelection();
+        $( '#slices_dialog' ).dialog(
+            {
+                modal: true,
+                title: "Select Slices",
+                buttons: {
+                    'OK': function() {
+                        jpost.addDatasetToSlice( datasets );
+                        jpost.updateTabs();
+                        $( '#slices_dialog' ).dialog( 'close' );
+                    },
+                    'Cancel': function() {
+                        $( '#slices_dialog' ).dialog( 'close' );
+                    }
+                }
+            }
+        );
+        jpost.onChangeSliceSelection();
+    }
+}
+
+// update slice selection
+jpost.updateSliceSelection = function() {
+    $( '#slice_selection' ).html( '' );
+
+    var value = '';
+    $( '#slice_selection' ).append( '<option value="">New slice...</option>' );
+    jpost.slices.forEach(
+        function( slice ) {
+            var id = slice.id;
+            var name = slice.name;
+            $( '#slice_selection' ).append( '<option value="' + id + '">' + name + '</option>' );
+            value = id;
+        }
+    );
+    $( '#slice_selection' ).val( value );
+}
+
+// on change slice selection
+jpost.onChangeSliceSelection = function() {
+    var name = $( '#slice_selection' ).val();
+    if( name === '' ) {
+        var name = prompt( "Input the slice name." );
+        if( name !== null && name !== '' ) {
+            var slice = {
+                name: name,
+                id: jpost.issueSliceId(),
+                datasets: []
+            };
+            jpost.slices.push( slice );
+            jpost.updateSliceSelection();
+        }
+    }
+}
+
+// add slices
+jpost.addDatasetToSlice = function( datasets ) {
+    var id = $( '#slice_selection' ).val();
+    var slice = jpost.findSlice( id );
+    if( slice != null ) {
+        datasets.forEach(
+            function( dataset ) {
+                if( slice.datasets.indexOf( dataset ) < 0 ) {
+                    slice.datasets.push( dataset );
+                }                
+            }
+        );
+    }
+    jpost.save();
+}
+
+// select slice
+jpost.selectSlice = function( id ) {
+    var slice =  jpost.findSlice( id );
+    jpost.slice = slice;
+    jpost.save();
+    jpost.updateTabs();
+    $( '#content_pane' ).css( 'display', 'block' );
+    $( '#comparison_pane' ).css( 'display', 'none' );
+
+    if( slice == null ) {
+        $( '.globe_pane' ).css( 'display', 'block' );
+        $( '.slice_pane' ).css( 'display', 'none');
+    }
+    else {
+        $( '.globe_pane' ).css( 'display', 'none' );
+        $( '.slice_pane' ).css( 'display', 'block');
+    }
+    jpost.updateStanzas();
+    jpost.updateTables();
+}
+
+// update stanzas
+jpost.updateStanzas = function() {
+    var slice = jpost.slice;
+    if( slice == null ) {
+        return;
+    }
+    var datasets = slice.datasets.join( ' ' );
+    var stanzas = [
+        {
+            name: 'table_dataset',
+            id: 'table_dataset',
+            data: function() {
+                return { dataset: datasets };
+            }
+        },
+        {
+            name: 'chromosome_histogram',
+            id: 'chromosome_histogram',
+            data: function() {
+                return { dataset: datasets }
+            }
+        },
+        {
+            name: 'protein_evidence',
+            id: 'protein_evidence',
+            data:  function() {
+                return { dataset: datasets }
+            }
+        }
+    ];
+
+    jpost.loadStanzas( stanzas );
+    console.log( "It's underconstraction" );
+}
+
+// compare slices
+jpost.compareSlices = function( id ) {
+    var slices = jpost.getCheckedSlices();
+    if( slices.length >= 2 ) {
+        var slice1 = slices[ 0 ];
+        var slice2 = slices[ 1 ];
+
+        if( jpost.slice1 != slice1 || jpost.slice2 != slices ) {
+            jpost.slice1 = slice1;
+            jpost.slice2 = slice2;
+
+            $( '#comparison_pane' ).html( '' );
+            var stanzas = [
+                {
+                    name: 'slice_comparison',
+                    id: 'comparison_pane',
+                    data: function() {
+                        return {
+                            datasets1: slice1.datasets.join( ' ' ),
+                            datasets2: slice2.datasets.join( ' ' ),
+                            slice1: slice1.name,
+                            slice2: slice2.name
+                        };
+                    }
+                }
+            ];
+            jpost.loadStanzas( stanzas );            
+        }
+
+        $( '#content_pane' ).css( 'display', 'none' );
+        $( '#comparison_pane' ).css( 'display', 'block' );
+    }
+}

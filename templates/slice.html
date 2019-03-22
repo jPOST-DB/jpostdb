@@ -3,6 +3,7 @@
   </div>
   <div id="slice_information_pane" class="slice_information_pane">
   </div>
+  <input type="file" id="upload_slices" style="display: none;"></input>
   <script>
       jpost.loadSlices();
       var id = -1;
@@ -10,5 +11,27 @@
           id = jpost.slice.id;
       }
       jpost.selectSlice( id );
+
+      $( '#upload_slices' ).on(
+          'change',
+          function( event ) {
+              var slice = jpost.getSelectedSlice();
+              var file = $(this).prop( 'files' )[ 0 ];
+              var reader = new FileReader();
+              reader.readAsText( file );
+              reader.onload = function( event ) {
+                  var result = JSON.parse( event.target.result );
+                  result.forEach(
+                      function( tmp ) {
+                          jpost.addSlice( tmp );
+                      }
+                  );
+                  jpost.saveSlices();
+                  jpost.updateTabs();
+                  jpost.selectSlice( slice.id );
+              }
+              
+          }
+      );
   </script>
 </div>

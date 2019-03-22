@@ -1,0 +1,256 @@
+
+<!-- saved from url=(0035)https://globe.jpostdb.org/help.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS"><style>
+ul {
+  font-size: 16px;
+}
+ul.ul_level1 {
+  list-style:none;
+}
+span.strong {
+  font-weight: bold;
+  color: #db7093;
+}
+li.h3 {
+  font-size: 34px;
+  margin-left: -40px;
+}
+
+div#main{
+  margin-right: 330px;
+}
+div#menu{
+  width: 300px;
+  padding:10px;
+  height:100%;
+  position:fixed;
+  top: 80px;
+  right:0px;
+}
+ul.nodeco {
+  list-style-type: none;
+}
+</style>
+
+</head><body><div id="main">
+<h2 id="c1">What is "jPOSTdb"?</h2>
+<ul class="ul_level1">
+  <li>The jPOSTdb is a database containing re-analysis results with unified criteria for raw data from <a href="https://repository.jpostdb.org/">jPOSTrepo</a> and other <a href="http://www.proteomexchange.org/">ProteomeXchange</a> (PX) repositories.</li>
+  <li>It provides following functions:</li>
+  <li>
+    <ul>
+      <li>Dataset filtering by metadata</li>
+      <li>Browsing of identified peptides, post-translational modifications (PTMs), and other data</li>
+      <li>Creation and comparison of "Slice";, which is dataset(s) filtered by a user</li>
+      <li>Basic statistical analysis and visualization of a specified "Slice";</li>
+    </ul>
+  </li>
+  <li>The jPOSTdb stores Peptide Spectrum Match (PSM) information and identified peptide information for each dataset.</li>
+  <li>Proteins are inferred based on these information by using the method proposed by <a href="http://www.mcponline.org/content/4/10/1419.abstract">Nesvizhskii, A.I. et al. 2005</a> (doi:10.1074/mcp.R500012-MCP200)</li>
+  <li>The jPOST database used the UniProt Reference Proteome dataset (with additional.fasta file) for peptide identification.</li>
+  <li>The information such as datasets, inferred proteins, identified peptides, and PSMs is hierarchically stored in the jPOST database. The whole dataset union is named "<span class="strong">Globe</span>" and the retrieved partial datasets filtered from the Globe is named "<span class="strong">Slice</span>."</li>
+  <li><img width="640" src="images/help/flow.png"></li>
+</ul>
+
+<h2 id="c2">How to use jPOSTdb</h2>
+<ul class="ul_level1">
+  <li class="h3" id="c2_1">Filtering 'Globe'</li>
+  <li>
+    <ul>
+      <li>Curated metadata such as species, sample types and cell lines are provided for filtering Globe, the whole dataset union, as well as simple keyword search.</li>
+      <li>Pie charts on the right can be used for specifying species and disease metadata, just by clicking the target.</li>
+    </ul>
+  </li>
+  <li><img width="640" src="images/help/search.png"></li>
+  <li class="h3" id="c2_2">How to make 'Slice'</li>
+  <li>
+    <ul>
+      <li>Select check box(es) your interested dataset(s).</li>
+      <li>Click "Add to Slice" button.</li>
+      <li>Because the Slice data is stored in WebStorage of your browser, your data is never leaked to the Internet. The different browser in your computer does not share WebStorage. So, you need to export and import the Slice to observe the same datasets in the different location (the different browser).</li>
+    </ul>
+  </li>
+  <li><img width="500" src="images/help/slice_check.png"><img width="400" src="./help_files/slice_new.png"></li>
+  <li class="h3" id="c2_3">Comparing Slices</li>
+  <li>
+    <ul>
+      <li>Two selected slices can be compared for statistical and functional analyses.</li>
+      <li>The details are described below.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="c3">Information pages for dataset, slice and protein</h2>
+<ul class="ul_level1">
+  <li>Dataset and slice pages consists of "Chromosome Info", "Protein Existence" and "KEGG Pathway Mapping", whereas protein pages consists of "Protein Browser" and "Peptide sharing".</li>
+</ul>
+
+<h3 id="c3_1">Chromosome Info.</h3>
+<ul class="ul_level1">
+  <li>Histogram of detected leading proteins (blue) and the total number of proteins (gray) per chromosome, mitochondria and plasmid. The protein count is based on the count of UniProt entry (therefore, the total number of proteins doesn’t mean the exact number of coding genes in each chromosome). In human dataset, the protein count is based on the count of neXtProt entry.</li>
+  <li><img width="640" src="images/help/chromosome.png"></li>
+</ul>
+
+<h3 id="c3_2">Protein Existence</h3>
+<ul class="ul_level1">
+  <li>Pie chart of the evidence types that supports existence of proteins, described in <a href="https://www.nextprot.org/">neXtProt database</a> (for human) and <a href="http://www.uniprot.org/">UniProt database</a> (for others).</li><li>
+  </li><li>
+    <ul>
+      <li>(ref. <a href="http://www.uniprot.org/help/protein_existence">uniprot:protein_existence</a>)</li>
+    </ul>
+  </li>
+  <li>Proteins classified as each evidence type are listed by using pulldown menu or clickable legend/chart.</li>
+  <li><img width="500" src="images/help/protein_level.png"></li>
+</ul>
+
+<h3 id="c3_3">KEGG Pathway Mapping</h3>
+<ul class="ul_level1">
+  <li>Proteins with <a href="http://www.genome.jp/kegg/ko.html">KEGG Orthology</a> (KO) annotation can be mapped to <a href="http://www.genome.jp/kegg/pathway.html">KEGG pathway</a>. The protein box color of pathway maps varies red to blue (red and blue show high and low expressions, respectively, based on their spectral counts).</li>
+</ul>
+
+<h3 id="c3_4">Protein Browser</h3>
+<ul class="ul_level1">
+  <li>Protein browser is a viewer of protein annotations. Users can add interest annotations into the viewer panel from pulldown menu.</li>
+  <li>
+    <ul>
+      <li>'Peptide alignment' shows detected peptides mapping to protein sequence. The color of peptide bars reflects the number of PSM, and varies red to gray (red shows high and gray shows low).</li>
+      <li>'PTM site' shows detected PTMs on protein sequence. The vertical bar length above the site reflects the count of PTM detection. ' norm.' shows normalized length by spectral counts including the site, and "count" shows real counts.</li>
+      <li>'P-site linkage' shows co-occurrence of phosphorylation sites on a peptide.</li>
+      <li>'UniProt annotation' shows PTM sites and single amino acid variations described in UniProt.</li>
+    </ul>
+  </li>
+  <li><img width="640" src="images/help/protein.png"></li>
+  <li>
+    <ul>
+      <li>zoom in/out with wheel/touchpad scroll</li>
+      <li>horizontal move with drag</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="c3_5">Peptide Sharing</h3>
+<ul class="ul_level1">
+  <li>Peptide sharing shows shared peptides mapping to multiple proteins. The same color of peptide bars means the same peptides. Numeric values over a peptide bar is the number of PSM. Users can switch the display with six buttons below the alignments.</li>
+  <li>
+    <ul>
+      <li>name: switch visible/invisible of protein names</li>
+      <li>color: switch coloring: i) Peptides only mapped to reference protein (top protein) are colored, and other peptides are colored by gray. ii) All peptides are colored.</li>
+      <li>trypsin: show the cleavage site by trypsin on protein sequences. Un-tryptic peptides are colored to gray.</li>
+      <li>exon: show the boundary of exons on protein sequences</li>
+      <li>guide: show guide line</li>
+      <li>edit: remove the protein user do not need</li>
+      </ul>
+  </li>
+  <li><img width="640" src="images/help/pep_share.png"></li>
+  <li>
+    <ul>
+      <li>zoom in/out with wheel/touchpad scroll</li>
+      <li>horizontal move with drag</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="c4">Slice comparison</h2>
+<ul class="ul_level1">
+  <li>Users can compare two slices by selecting Slices from pulldown menu.</li>
+  <li><img width="640" src="images/help/compare.png"></li>
+</ul>
+
+<h3 id="c4_1">Differential Expression Analysis</h3>
+<ul class="ul_level1">
+  <li>User can compare the expression level of proteins between two Slices by empirical Bayes estimate, Wilcoxon rank sum test and fold change of average from the pulldown menu. The quantification is based on spectral counting.</li>
+  <li>The former two methods use R programming language library. These methods need at least 2 datasets in either Slice. In the volcano plot, users can change thresholds of the fold change and p-value by moving the triangle marker on x- and y-axis.</li>
+  <li>The fold change of average expression level in a protein is shown as histogram like plot. Any statistical test is not applied, so p-value is not calculated. The y-axis shows pseudo frequency and has strictly little meaning.</li>
+  <li><img width="640" src="images/help/diff_exp.png"></li>
+  <li>
+    <ul>
+      <li>move threshold bars with drag of triangle markers</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="c4_2">Enrichment Analysis</h3>
+<ul class="ul_level1">
+  <li>Protein set enrichment analysis for selected proteins in the differential expression analysis. Users can select a target from KEGG pathway category and three categories of <a href="http://www.geneontology.org/">Gene Ontology</a> (GO) (biological process, molecular function and cellular component).</li>
+  <li>The result is displayed by a network graph and a table. Nodes in the network show categories of KEGG or GO, and node color of enriched category varies yellow to red (p-value &lt; 0.05, yellow shows high and red shows low). The blue node shows root category of network. Each node size reflects the number of selected proteins in the differential expression analysis. However, the size of white node and root node is limited up to the maximum size of enriched nodes colored from yellow to red to make network layout clearer. </li>
+  <li><img width="640" src="images/help/enrich.png"></li>
+  <li>
+    <ul>
+      <li>zoom in/out with wheel/touchpad scroll</li>
+      <li>move with drag</li>
+    </ul>
+  </li>
+  <li>When the target is the KEGG pathway, users can map proteins to KEGG pathway map. The boxes of maps are colored blue to red (blue shows expression level is decrease and red shows increase). When a box corresponds to multiple proteins, box color reflects any one of proteins (It is a restriction of the KEGG mapper).</li>
+  <li><img width="640" src="images/help/enrich_table.png"></li>
+</ul>
+
+<h2 id="c5">Vocabularies</h2>
+<ul class="ul_level1">
+  <li>Database</li>
+  <li>
+    <ul>
+      <li>Globe: Accumulated results of re-analyses for raw data. All datasets in the jPOSTdb.</li>
+      <li>Slice: A dataset group which is the result filtered by meta-data from the globe database. Or a dataset group which merged several  filtering results.</li>
+    </ul>
+  </li>
+  <li>Protein type</li>
+  <li>
+    <ul>
+      <li>Leading protein: The representative protein in a protein group. (ref. <a href="http://purl.obolibrary.org/obo/MS_1002401">PSI-MS_1002401</a>)</li>
+      <li>Spectrum same-set protein: The protein which matched same-set of spectrum (same-set of PSM) of a leading protein. (ref. <a href="http://purl.obolibrary.org/obo/MS_1001595">PSI-MS_1001595</a>)</li>
+      <li>Spectrum sub-set protein: The protein which matched sub-set spectrum of a leading protein. (ref. <a href="http://purl.obolibrary.org/obo/MS_1001597">PSI-MS_1001597</a>)</li>
+      <li>Spectrum subsumable protein: The protein of which spectrum are across two or more leading proteins. (ref. <a href="http://purl.obolibrary.org/obo/MS_1001599">PSI-MS_1001599</a>)</li>
+    </ul>
+  </li>
+  <li>Peptide type</li>
+  <li>
+    <ul>
+      <li>Shared peptide: The peptide exists in multiple proteins. This is not unique peptide, clearly.</li>
+      <li>Unique peptide: The peptide exists in only one protein.</li>
+      <li style="list-style:none; ">
+	<ul>
+	  <li>Shared peptide at MS level: The peptide exists in multiple proteins, when leucine and isoleucine are not distinguished. This is unique peptide at amino acid level but not unique at result of MS.</li>
+	  <li>Unique peptide at MS level: The peptide exists in only one protein, even when leucine and isoleucine are not distinguished. This is unique peptide, clearly.</li>
+	  </ul>
+	</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="c6">Reference</h2>
+<ul class="ul_level1">
+  <li> The jPOST environment: an integrated proteomics data repository and database<br>Yuki Moriya, Shin Kawano, Shujiro Okuda, Yu Watanabe, Masaki Matsumoto, Tomoyo Takami, Daiki Kobayashi, Yoshinori Yamanouchi, Norie Araki, Akiyasu C. Yoshizawa, Tsuyoshi Tabata, Mio Iwasaki, Naoyuki Sugiyama, Satoshi Tanaka, Susumu Goto, Yasushi Ishihama<br> Nucl. Acids Res. 47 (D1). <a href="https://doi.org/10.1093/nar/gky899">doi: 10.1093/nar/gky899</a>
+  </li>
+</ul>
+</div>
+
+<div id="menu">
+  <ul class="nodeco">
+    <li><a href="https://globe.jpostdb.org/help.html#c1">What is "jPOSTdb"?</a></li>
+    <li><a href="https://globe.jpostdb.org/help.html#c2">How to use jPOSTdb</a>
+      <ul>
+	<li><a href="https://globe.jpostdb.org/help.html#c2_1">Filtering 'Globe'</a></li>
+	<li><a href="https://globe.jpostdb.org/help.html#c2_2">How to make 'Slice'</a></li>
+	<li><a href="https://globe.jpostdb.org/help.html#c2_3">Comparing Slices</a></li>
+      </ul>
+    </li>
+    <li><a href="https://globe.jpostdb.org/help.html#c3">Information pages for dataset, slice and protein</a>
+      <ul>
+	<li><a href="https://globe.jpostdb.org/help.html#c3_1">Chromosome Info.</a></li>
+	<li><a href="https://globe.jpostdb.org/help.html#c3_2">Protein Existence</a></li>
+	<li><a href="https://globe.jpostdb.org/help.html#c3_3">KEGG Pathway Mapping</a></li>
+	<li><a href="https://globe.jpostdb.org/help.html#c3_4">Protein Browser</a></li>
+	<li><a href="https://globe.jpostdb.org/help.html#c3_5">Peptide Sharing</a></li>
+      </ul>
+    </li>
+    <li><a href="https://globe.jpostdb.org/help.html#c4">Slice comparison</a>
+      <ul>
+	<li><a href="https://globe.jpostdb.org/help.html#c4_1">Differential Expression Analysis</a></li>
+	<li><a href="https://globe.jpostdb.org/help.html#c4_2">Enrichment Analysis</a></li>
+      </ul>
+    </li>
+    <li><a href="https://globe.jpostdb.org/help.html#c5">Vocabularies</a></li>
+    <li><a href="https://globe.jpostdb.org/help.html#c6">Reference</a></li>
+  </ul>
+</div>
+</body></html>

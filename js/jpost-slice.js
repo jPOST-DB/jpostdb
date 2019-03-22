@@ -96,6 +96,36 @@ jpost.addSliceContens = function( slice ) {
 
     $( '#' + mainId ).append( '<h2>' + slice.name  + '</h2>' );
     $( '#' + mainId ).append( '<p>' + slice.description  + '</p>' );
+
+    var buttonId = id + '_buttons';
+    tag = '<div><div id="' + buttonId + '" style="float: right;></div><div style="clear: both;"></div></div>';
+    $( '#' + mainId ).append( tag );
+
+    $( '#' + buttonId ).append( '<button id="' + id + '_upload_button" class="operation_button"><span class="fas fa-upload"></span></button>' );
+    $( '#' + id + '_upload_button' ).click(
+        function() {
+            jpost.uploadSlices();
+        }
+    );
+    $( '#' + buttonId ).append( '<button id="' + id + '_download_button" class="operation_button"><span class="fas fa-download"></span></button>' );
+    $( '#' + id + '_download_button' ).click(
+        function() {
+            jpost.downloadSlice( slice );
+        }
+    );    
+    $( '#' + buttonId ).append( '<button id="' + id + '_edit_button" class="operation_button"><span class="fas fa-edit"></span></button>' );
+    $( '#' + id + '_edit_button' ).click(
+        function() {
+            jpost.editSlice( slice );
+        }
+    );   
+    $( '#' + buttonId ).append( '<button id="' + id + '_delete_button" class="operation_button"><span class="fas fa-trash-alt"></span></button>' );
+    $( '#' + id + '_delete_button' ).click(
+        function() {
+            jpost.removeSlice( slice );
+        }
+    );   
+
     $( '#' + mainId ).append( '<h3>Chromosome Info.</h3>' );
     $( '#' + mainId ).append( '<div id="' + id + '_chromosome"></div>' );
     $( '#' + mainId ).append( '<h3>Protein Existence</h3>' );
@@ -741,4 +771,32 @@ jpost.compareSlices = function() {
             ];
             jpost.loadStanzas( stanzas );            
     }
+}
+
+jpost.uploadSlices = function() {
+    $( '#upload_slices' ).click();
+}
+
+jpost.onUpdateFile = function() {
+
+}
+
+jpost.downloadSlice = function( slice ) {
+    var json = JSON.stringify( [ slice ] );
+    var file = new File(
+        [ json ],
+        slice.name + ".json",
+        {
+            type: 'text/plain;charset=utf-8'
+        }
+    );
+    saveAs( file );
+}
+
+jpost.editSlice = function( slice ) {
+
+}
+
+jpost.removeSlice = function( slice ) {
+
 }

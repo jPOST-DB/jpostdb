@@ -225,7 +225,7 @@ jpost.getDatasetColumns = function() {
             title: 'Dataset ID',
             field: 'dataset_id',
             format: function( dataset ) {
-                var url = 'dataset/' + dataset.dataset_id;
+                var url = "javascript:jpost.openGlobalDataset( '" + dataset.dataset_id + "' )";
                 var tag = '<a href="' + url + '">' + dataset.dataset_id + '</a>';
                 return tag;
             },
@@ -308,7 +308,7 @@ jpost.getProteinColumns = function() {
             title: 'Protein Name',
             field: 'full_name',
             format: function( protein ) {
-                var url = '/protein/' + protein.accession;
+                var url = "javascript:jpost.openGlobalProtein( '" + protein.accession + "' )";
                 var tag = '<a href="' + url + '">' + protein.full_name + '</a>';
                 return tag;
             },
@@ -355,4 +355,185 @@ jpost.updateGlobalTables = function() {
     table.updateTable( 'proteins');
 }
 
+// open global dataset
+jpost.openGlobalDataset = function( dataset ) {
+    var url = 'dataset_detail.php?id=' + dataset;
+    $( '#sub_search_panel' ).load( url );
+    $( '#main_search_panel' ).css( 'display', 'none' );
+    $( '#sub_search_panel' ).css( 'display', 'block' );    
+}
 
+// open global protein
+jpost.openGlobalProtein = function( protein ) {
+    var url = 'protein_detail.php?id=' + protein;
+    $( '#sub_search_panel' ).load( url );
+    $( '#main_search_panel' ).css( 'display', 'none' );
+    $( '#sub_search_panel' ).css( 'display', 'block' );    
+}
+
+// open global protein
+jpost.openGlobalPeptide = function( peptide ) {
+    var url = 'peptide_detail.php?id=' + peptide;
+    $( '#sub_search_panel' ).load( url );
+    $( '#main_search_panel' ).css( 'display', 'none' );
+    $( '#sub_search_panel' ).css( 'display', 'block' );    
+}
+
+// create dataset protein table
+jpost.createDatasetProteinTable = function( id, dataset ) {
+    table.createTable(
+        id,
+        {
+            url: 'protein_table.php',
+            columns: jpost.getProteinColumns(),
+            parameters: function() {
+                return { datasets: [ dataset ] };
+            }
+        }
+    );
+}
+
+// create dataset peptide table
+jpost.createDatasetPeptideTable = function( id, dataset ) {
+    table.createTable(
+        id,
+        {
+            url: 'peptide_table.php',
+            columns: jpost.getPeptideColumns(),
+            parameters: function() {
+                return { datasets: [ dataset ] };
+            }
+        }
+    );
+}
+
+
+// create protein peptide table
+jpost.createProteinPeptideTable = function( id, protein ) {
+    table.createTable(
+        id,
+        {
+            url: 'peptide_table.php',
+            columns: jpost.getPeptideColumns(),
+            parameters: function() {
+                return { proteins: [ protein ] };
+            }
+        }
+    );
+}
+
+// get peptide columns
+jpost.getPeptideColumns = function() {
+    var columns = [
+        {
+            title: 'ID',
+            field: 'peptide_id',
+/*            
+            format: function( peptide ) {
+                var id = peptide.peptide_id;
+                var url = "javascript:jpost.openGlobalPeptide( '" + id + "' )";
+                var tag = '<a href="' + url + '">' + id + '</a>';
+                return tag;
+            },
+*/            
+            width: 250
+        },
+        {
+            title: 'Dataset ID',
+            field: 'dataset_id',
+            format: function( peptide ) {
+                var url = "javascript:jpost.openGlobalDataset( '" + peptide.dataset_id + "' )";
+                var tag = '<a href="' + url + '">' + peptide.dataset_id + '</a>';
+                return tag;
+            },
+            width: 200
+        },
+        {
+            title: 'Protein Name',
+            field: 'full_name',
+            format: function( peptide ) {
+                var url = "javascript:jpost.openGlobalProtein( '" + peptide.accession + "' )";
+                var tag = '<a href="' + url + '">' + peptide.full_name + '</a>';
+                return tag;
+            },
+            width: 350
+        },
+        {
+            title: 'Accession',
+            field: 'accession',
+            format: function( peptide ) {
+                var accession = peptide.accession;
+                var url = 'https://www.uniprot.org/uniprot/' + accession;
+                var tag = '<a href="' + url + '">' + accession + '</a>';
+                return tag;
+            },
+            width: 180
+        },
+        {
+            title: 'Protein ID',
+            field: 'mnemonic',
+            width: 180
+        },
+        {
+            title: 'Sequence',
+            field: 'sequence',
+            width: 350,
+        }
+    ];
+    return columns;
+}
+
+// create protein peptide table
+jpost.createProteinPsmTable = function( id, protein ) {
+    table.createTable(
+        id,
+        {
+            url: 'psm_table.php',
+            columns: jpost.getPsmColumns(),
+            parameters: function() {
+                return { proteins: [ protein ] };
+            }
+        }
+    );
+}
+
+// get psm columns
+jpost.getPsmColumns = function() {
+    var columns = [
+        {
+            title: 'ID',
+            field: 'psm_id',
+            width: 200,
+        },
+        {
+            title: 'jPOST Score',
+            field: 'jpost_score',
+            width: 120,
+            align: 'right'
+        },
+        {
+            title: 'Charge',
+            field: 'charge',
+            width: 100,
+            align: 'right'
+        }, 
+        {
+            title: 'Calculated Mass',
+            field: 'calc_mass',
+            width: 200,
+            align: 'right'
+        },
+        {
+            title: 'Experimental Mass',
+            field: 'exp_mass',
+            width: 200,
+            align: 'right'
+        },
+        {
+            title: 'Sequence',
+            field: 'sequence',
+            width: 350,
+        }
+    ];
+    return columns;
+}

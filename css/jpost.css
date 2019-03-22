@@ -53,33 +53,6 @@ input[type="text"] {
   padding: 20px;
 }
 
-#filter_pane {
-  margin: 20px;
-  padding: 0;
-  border: solid 1px lightgray;
-  border-radius: 3px;
-}
-
-#filter_title_button {
-  display: block;
-  padding: 10px;
-  margin: 0;
-  width: 100%;
-  border: none;
-  text-align: left;
-  border: none;
-  border-radius: 0;
-  outline: none;
-}
-
-#filter_title_button:active {
-  border: none;
-}
-
-#filter_body {
-  padding: 10px;
-}
-
 #information_pane {
   margin: 10px;
   padding: 0;
@@ -92,6 +65,10 @@ input[type="text"] {
 
 #compare_button {
   margin: 10px;
+}
+
+#slice_dialog {
+  width: 700px;
 }
 
 .component {
@@ -339,3 +316,31 @@ input[type="text"] {
   display: -webkit-flex;
   display: flex;
 }
+
+.filter_title_button {
+  display: block;
+  padding: 10px;
+  margin: 0;
+  width: 100%;
+  border: none;
+  text-align: left;
+  border: none;
+  border-radius: 0;
+  outline: none;
+}
+
+.filter_title_button:active {
+  border: none;
+}
+
+.filter_body {
+  padding: 10px;
+}
+
+.filter_pane {
+  margin: 20px;
+  padding: 0;
+  border: solid 1px lightgray;
+  border-radius: 3px;
+}
+

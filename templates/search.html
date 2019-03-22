@@ -33,5 +33,16 @@
     <script>
       jpost.createGlobalProteinTable( 'proteins' );
     </script>
+    <div>
+      <button id="new_slice_button">New Slice...</button>
+    </div>
+    <script>
+      $( '#new_slice_button' ).click(
+          function() {
+              jpost.openTab( 'slice' );
+              jpost.openNewSliceDialog();
+          }
+      );
+    </script>
   </div>
 </div>

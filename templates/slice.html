@@ -1,0 +1,14 @@
+<div>
+  <div id="slice_tab_field">
+  </div>
+  <div id="slice_information_pane" class="slice_information_pane">
+  </div>
+  <script>
+      jpost.loadSlices();
+      var id = -1;
+      if( jpost.slice != null ) {
+          id = jpost.slice.id;
+      }
+      jpost.selectSlice( id );
+  </script>
+</div>

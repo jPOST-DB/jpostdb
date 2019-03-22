@@ -1,0 +1,84 @@
+<div>
+  <h2>Protein: {{ id }}</h2>
+  <div id="table_protein"></div>
+      
+  <h3>Protein Browser</h3>
+  <div id="protein_browser"></div>
+      
+  <h3>Peptide Sharing</h3>
+  <div id="proteoform_browser"></div>
+      
+  <div id="information_pane">
+    <div id="tab_buttons_line">
+      <button id="protein_peptide_tab_button" class="protein_tab_button tab_button tab_active">Peptide</button>
+      <button id="protein_psm_tab_button" class="protein_tab_button tab_button">Psm</button>
+      <script>
+        $( '#protein_peptide_tab_button' ).click( 
+            function() {
+                jpost.changeTabPanel( 'protein_peptide', 'protein' );
+            }
+        );
+        $( '#protein_psm_tab_button' ).click( 
+            function() {
+                jpost.changeTabPanel( 'protein_psm', 'protein' );
+            }
+        );
+      </script>
+      <button class="fill_blank"></button>
+      <div style="clear: both;"></div>
+    </div>
+    <div id="protein_peptide_tab_pane" class="tab_pane protein_tab_pane">
+      <form id="peptide_form" onsubmit="return false;">
+        <div id="protein_peptides" class="information_table"></div>
+      </form>
+    </div>
+    <div id="protein_psm_tab_pane" class="tab_pane protein_tab_pane" style="display: none;">
+      <form id="psm_form" onsubmit="return false;">
+        <div id="protein_psm" class="information_table"></div>
+      </form>      
+    </div>
+  </div>  
+</div>
+      
+      <script>
+          var id = '{{ id }}';
+          var stanzas = [
+              {
+                  name: 'table_protein',
+                  id: 'table_protein',
+                  width: 900,
+                  height: 700,
+                  data: function() {
+                      return {
+                          uniprot: id
+                      };
+                  }
+              },
+              {
+                  name: 'protein_browser',
+                  id: 'protein_browser',
+                  width: 900,
+                  height: 400,
+                  data: function() {
+                      return {
+                          uniprot: id
+                      };
+                  }
+              },
+              {
+                  name: 'proteoform_browser',
+                  id: 'proteoform_browser',
+                  width: 900,
+                  height: 500,
+                  data: function() {
+                      return {
+                          uniprot: id
+                      };
+                  }
+              }
+          ];   
+          jpost.loadStanzas( stanzas );
+          jpost.createProteinPeptideTable( 'protein_peptides', id );
+          jpost.createProteinPsmTable( 'protein_psm', id );
+      </script>
+      

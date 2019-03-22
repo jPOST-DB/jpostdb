@@ -6,14 +6,15 @@
             if( $parameters === null ) {
                 $parameters = array();
             }
+            $data = http_build_query( $parameters );
             $options = array(
                 'http' => array(
                     'method' => 'POST',
-                    'header' => 'Content-Type: application/x-www-form-urlencoded',
-                    'content' => http_build_query( $parameters )
+                    'header' => 'Content-Type: application/x-www-form-urlencoded'
                 )
             );
-            $contents = file_get_contents( $url, false, stream_context_create( $options ) );
+            $url2 = $url . '?' . $data;
+            $contents = file_get_contents( $url2, false, stream_context_create( $options ) );
             $data = json_decode( $contents, true );
             $keys = $data[ 'head' ][ 'vars' ];
             $bindings = $data[ 'results' ][ 'bindings' ];

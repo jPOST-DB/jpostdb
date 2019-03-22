@@ -1,0 +1,33 @@
+<div>
+  <div id="slice_dialog" style="display: none;">
+    <input id="dialog_slice_name" type="text" name="slice_name" placeholder="Slice name" style="width: 100%; margin: 5px;"></input>
+    <textarea id="dialog_slice_description" placeholder="Description" style="width: 100%; margin: 5px;" rows="4"></textarea>
+    <div id="filter_pane" class="filter_pane">
+      <button id="slice_dialog_filter_title_button" class="filter_title_button">
+        Filter
+        <span id="slice_dialog_filter_title_icon" class="fas fa-caret-up filter_title_icon"></span>
+      </button>
+      <div id="slice_dialog_filter_body" class="filter_body">
+        <form id="slice_dialog_filter_form" class="filter_form" style="width: 700px;">
+        </form>
+        <button id="slice_dialog_form_add_button" class="form_add_button" style="width: 50px">+</button>
+        <script>
+          $( '#slice_dialog_form_add_button' ).click( jpost.addFormInDialog );
+          jpost.prepareFilterInDialog();
+        </script>
+      </div>
+    </div>
+    <input type="text" name="slice_keyword" placeholder="Keyword" style="width: 100%; margin: 5px;"></input>
+    <form id="slice_dialog_table"></form>
+    <script>
+        jpost.createDialogDatasetTable( 'slice_dialog_table' );
+        var pageSizeId = 'slice_dialog_table_page_size';
+        $( '#dialog_dataset_all_check' ).change(
+            function() {
+                var checked = $( '#dialog_dataset_all_check' ).prop( 'checked' );
+                $( '.dialog_dataset_check' ).prop( 'checked', checked );
+            }
+        )
+    </script>
+  </div>
+</div>

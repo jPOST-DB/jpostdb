@@ -26,9 +26,15 @@
     <article class="main">
       <div class="component main">
         <div id="search_panel" class="main_tab_field">
-            {{ include( "search.html" ) }}
+            <div id="main_search_panel">
+              {{ include( "search.html" ) }}
+            </div>
+            <div id="sub_search_panel">
+            </div>
         </div>
-        <div id="slice_panel" class="main_tab_field">slice</div>
+        <div id="slice_panel" class="main_tab_field">
+          {{ include( "slice.html" ) }}
+        </div>
         <div id="compare_panel" class="main_tab_field">compare</div>
         <div id="help_panel" class="main_tab_field">help</div>
       </div>

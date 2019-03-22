@@ -390,7 +390,7 @@ table.setHeaders = function( name ) {
             $( '#' + pageSizeId ).append( tag );
         }
     );
-    var page = 25;
+    var page = 10;
     $( '#' + pageSizeId ).val( page );
 
     $( '#' + pageSizeId ).change( 

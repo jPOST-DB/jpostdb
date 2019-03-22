@@ -1,0 +1,89 @@
+<div>
+  <h2>Dataset: {{ id }}</h2>
+  <div id="table_dataset"></div>
+    <h3>Chromosome Info.</h3>
+    <div id="chromosome_histogram"></div>
+      
+    <h3>Protein Existence</h3>
+    <div id="protein_evidence"></div>
+      
+    <h3>KEGG Pathway Mapping</h3>
+    <div id="kegg_mapping_form"></div>
+      
+    <div id="information_pane">
+      <div class="tab_buttons_line">
+        <button id="dataset_protein_tab_button" class="dataset_tab_button tab_button tab_active">Protein</button>
+        <button id="dataset_peptide_tab_button" class="dataset_tab_button tab_button">Peptide</button>      
+            <script>
+              $( '#dataset_protein_tab_button' ).click( 
+                  function() {
+                      jpost.changeTabPanel( 'dataset_protein', 'dataset' );
+                  }
+              );
+              $( '#dataset_peptide_tab_button' ).click( 
+                  function() {
+                      jpost.changeTabPanel( 'dataset_peptide', 'dataset' );
+                  }
+              );
+            </script>
+            <button class="fill_blank"></button>
+            <div style="clear: both;"></div>
+          </div>
+          <div id="dataset_protein_tab_pane" class="tab_pane dataset_tab_pane">
+            <form id="protein_form" onsubmit="return false;">
+              <div id="dataset_proteins" class="information_table"></div>
+            </form>
+          </div>
+          <div id="dataset_peptide_tab_pane" class="tab_pane dataset_tab_pane" style="display: none;">
+            <form id="peptide_form" onsubmit="return false;">
+              <div id="dataset_peptides" class="information_table"></div>
+            </form>
+          </div>
+        </div>  
+      </div>
+      
+      <script>
+          var id = '{{ id }}';
+          var stanzas = [
+              {
+                  name: 'table_dataset',
+                  id: 'table_dataset',
+                  width: 900,
+                  height: 750,
+                  data: function() {
+                      return { dataset: id };
+                  }
+              },
+              {
+                  name: 'kegg_mapping_form',
+                  id: 'kegg_mapping_form',
+                  width: 900,
+                  height: 200,
+                  data: function() {
+                      return { dataset: id }
+                  }
+              },
+              {
+                  name: 'chromosome_histogram',
+                  id: 'chromosome_histogram',
+                  width: 900,
+                  height: 600,                  
+                  data: function() {
+                      return { dataset: id }
+                  }
+              },
+              {
+                  name: 'protein_evidence',
+                  id: 'protein_evidence',
+                  width: 900,
+                  height: 500,                  
+                  data:  function() {
+                      return { dataset: id }
+                  }
+              }
+          ];
+          jpost.loadStanzas( stanzas );
+          jpost.createDatasetProteinTable( 'dataset_proteins', id );
+          jpost.createDatasetPeptideTable( 'dataset_peptides', id );
+      </script>
+      

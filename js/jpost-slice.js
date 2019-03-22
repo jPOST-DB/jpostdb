@@ -376,6 +376,14 @@ jpost.updateFilterFormInDialog = function( id ) {
 }
 
 jpost.updateDialogTable = function() {
+    var name = '';
+    var description = '';
+    if( jpost.slice !== null ) {
+        name = jpost.slice.name;
+        description = jpost.slice.description;
+    }
+    $( '#dialog_slice_name' ).val( name );
+    $( '#dialog_slice_description' ).val( description ); 
     table.updateTable( 'slice_dialog_table' );
 }
 
@@ -777,10 +785,6 @@ jpost.uploadSlices = function() {
     $( '#upload_slices' ).click();
 }
 
-jpost.onUpdateFile = function() {
-
-}
-
 jpost.downloadSlice = function( slice ) {
     var json = JSON.stringify( [ slice ] );
     var file = new File(
@@ -794,9 +798,56 @@ jpost.downloadSlice = function( slice ) {
 }
 
 jpost.editSlice = function( slice ) {
-
+    jpost.updateDialogTable();
+    $( '#slice_dialog' ).dialog(
+        {
+            modal: true,
+            title: 'Edit Slice',
+            width: '800px',
+            buttons: {
+                Update: function() {
+                    var name = $( '#dialog_slice_name' ).val();
+                    if( name == null || name == '' ) {
+                        alert( "Slice Name is empty." );
+                        return;
+                    }
+                    var description = $( '#dialog_slice_description' ).val();
+                    var datasets = jpost.getCheckedDatasets();
+                    if( datasets == 0 || datasets.length == 0 ) {
+                        alert( "No datasets are selected.")
+                        return;
+                    }
+                    jpost.slice.name = name;
+                    jpost.slice.description = description;
+                    jpost.datasets = datasets;
+                    jpost.selectSlice( jpost.slice.id );
+                    $( this ).dialog( 'close' );
+                },
+                Cancel: function() {
+                    $( this ).dialog( 'close' );
+                }
+            }
+        }
+    );
 }
 
 jpost.removeSlice = function( slice ) {
-
+    if( confirm( "Are you sure to delete this slice?" ) ) {
+        var index = -1;
+        for( var i = 0; i < jpost.slices.length; i++ ) {
+            if( jpost.slice == jpost.slices[ i ] ) {
+                index = i;
+            }
+        }
+        if( index >= 0 ) {
+            jpost.slice = null;
+            jpost.slices.splice( index, 1 );
+            if( jpost.slices.length > 0 ) {
+                jpost.selectSlice( jpost.slices[ 0 ].id )
+            }
+            else {
+                jpost.selectSlice( -1 );
+            }
+        }
+    }
 }

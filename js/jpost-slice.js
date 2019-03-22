@@ -61,6 +61,7 @@ jpost.saveSlices = function() {
 jpost.updateTabs = function() {
     $( '#slice_tab_field' ).html( '' );
     $( '#slice_information_pane' ).html( '' );
+    $( '.slices' ).html( '' );
     jpost.slices.forEach(
         function( slice ) {
             tab = '<a class="tab_link title_link" ';
@@ -71,11 +72,12 @@ jpost.updateTabs = function() {
                 + '</div><div><input type="checkbox" class="slice_tab_check" name="slices[]" value="' + slice.id + '" /></div></a>';
             $( '#slice_tab_field' ).append( tab );
             jpost.addSliceContens( slice );
+            $( '.slices' ).append( '<option value="' + slice.id + '">' + slice.name + '</option>' );
         }
     );
     $( '#slice_tab_field' ).append( '<a href="javascript:jpost.openNewSliceDialog()" class="tab_link title_link tab_link_short"><div>+</div></a>' );
     $( '#slice_tab_field' ).append( '<button id="compare_button">Compare</button>' );
-    $( '#compare_button' ).click( jpost.compareSlices );
+    $( '#compare_button' ).click( jpost.onCompareButton );
 }
 
 // add slice contents
@@ -677,4 +679,66 @@ jpost.getSlicePeptideColumns = function() {
         }
     ];
     return columns;
+}
+
+// get checked slices
+jpost.getCheckedSlices = function() {
+    var array = [];
+    $( '[class="slice_tab_check"]:checked' ).map(
+        function() {
+            array.push( $( this ).val() );
+        }
+    );
+
+    slices = [];
+    array.forEach(
+        function( id ) {
+            var slice = jpost.findSlice( id );
+            if( slice !== null ) {
+                slices.push( slice );
+            }
+        }
+    );
+    return slices;
+}
+
+jpost.onCompareButton = function() {
+    var slices = jpost.getCheckedSlices();
+    if( slices == null || slices.length == 0 ) {
+        alert( "No slices are selected." );
+        return;
+    }
+    if( slices.length != 2 ) {
+        alert( "Select just two slices before comparing." );
+        return;
+    }
+    $( '#slice1' ).val( slices[ 0 ].id );
+    $( '#slice2' ).val( slices[ 1 ].id ); 
+    jpost.openTab( 'compare' );
+    jpost.compareSlices();
+}
+
+// compare slices
+jpost.compareSlices = function() {
+    var slice1 = jpost.findSlice( $( '#slice1' ).val() );
+    var slice2 = jpost.findSlice( $( '#slice2' ).val() );
+    if( slice1 != null && slice2 != null && slice1 != slice2 ) {
+        var stanzas = [
+                {
+                    name: 'slice_comparison',
+                    id: 'compare_result_pane',
+                    width: 800,
+                    height: 800,
+                    data: function() {
+                        return {
+                            datasets1: slice1.datasets.join( ' ' ),
+                            datasets2: slice2.datasets.join( ' ' ),
+                            slice1: slice1.name,
+                            slice2: slice2.name
+                        };
+                    }
+                }
+            ];
+            jpost.loadStanzas( stanzas );            
+    }
 }

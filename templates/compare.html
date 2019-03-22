@@ -1,0 +1,22 @@
+<div>
+  <div>
+    Slice1: 
+    <select id="slice1" class="slices" style="width: 500px;"></select>
+  </div>
+  <div>
+    Slice2: 
+    <select id="slice2" class="slices" style="width: 500px;"></select>
+  </div>
+  <div id="compare_result_pane"></div>
+  <script>
+      jpost.slices.forEach(
+          function( slice ) {
+            console.log( slice );
+            $( '.slices' ).append( '<option value="' + slice.id + '">' + slice.name + '</option>' );
+          }
+      );
+      $( '#slice1' ).change( jpost.compareSlices );
+      $( '#slice2' ).change( jpost.compareSlices );
+      
+  </script>
+</div>

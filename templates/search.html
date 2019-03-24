@@ -22,12 +22,18 @@
       </script>
     </div>
     <div id="global_dataset_tab_pane" class="tab_pane global_tab_pane">
+      <div>
+        <input id="global_dataset_text" type="text" style="width: 300px" placeholder="Keyword" />
+      </div>
       <div id="datasets" class="information_table"></div>
     </div>
     <script>
       jpost.createGlobalDatasetTable( 'datasets' );
     </script>
     <div id="global_protein_tab_pane" class="tab_pane global_tab_pane" style="display: none;">
+      <div>
+        <input id="global_protein_text" type="text" style="width: 300px" placeholder="Keyword" />
+      </div>      
       <div id="proteins" class="information_table"></div>
     </div>
     <script>
@@ -41,6 +47,16 @@
           function() {
               jpost.openTab( 'slice' );
               jpost.openNewSliceDialog();
+          }
+      );
+      $( '#global_dataset_text' ).change(
+          function() {
+              jpost.updateGlobalTables();
+          }
+      );
+      $( '#global_protein_text' ).change(
+          function() {
+              jpost.updateGlobalTables();
           }
       );
     </script>

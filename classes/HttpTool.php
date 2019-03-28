@@ -44,14 +44,18 @@
          */
         public static function setFilterParameters( &$parameters ) {
             $filters = array( 'species', 'sampleType', 'cellLine', 'organ', 'disease', 'modification', 'instrument' );
-                foreach( $filters as $filter ) {
+            foreach( $filters as $filter ) {
                 $array = self::getParameter( $filter );
                 if( $array !== null ) {
                     $parameters[ $filter ] = join( ',', $array );
                 }
             }
+            $keywords = array( 'dataset_keywords', 'protein_keywords' );
+            foreach( $keywords as $keyword ) {
+                $parameters[ $keyword ] = self::getParameter( $keyword );
+            }
         }
-
+        
         /**
          * sets target
          */

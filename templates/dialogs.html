@@ -17,8 +17,8 @@
         </script>
       </div>
     </div>
-    <input type="text" name="slice_keyword" placeholder="Keyword" style="width: 100%; margin: 5px;"></input>
-    <form id="slice_dialog_table"></form>
+    <input type="text" id="slice_keyword_text" name="slice_keyword" placeholder="Keyword" style="width: 100%; margin: 5px;"></input>
+    <div id="slice_dialog_table"></div>
     <script>
         jpost.createDialogDatasetTable( 'slice_dialog_table' );
         var pageSizeId = 'slice_dialog_table_page_size';
@@ -27,7 +27,12 @@
                 var checked = $( '#dialog_dataset_all_check' ).prop( 'checked' );
                 $( '.dialog_dataset_check' ).prop( 'checked', checked );
             }
-        )
+        );
+        $( '#slice_keyword_text' ).keyup( 
+            function() {
+                jpost.updateDialogTable();
+            }
+        );
     </script>
   </div>
 </div>

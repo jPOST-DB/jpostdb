@@ -428,7 +428,6 @@ jpost.getDialogFilterParameters = function() {
     var parameters = $( '#slice_dialog_filter_form' ).serializeArray();
     var names = {};
     var data = {};
-
     parameters.forEach(
         function( parameter ) {
             var name = parameter.name;
@@ -444,6 +443,7 @@ jpost.getDialogFilterParameters = function() {
             }
         }
     );
+    data.dataset_keywords = $( '#slice_keyword_text' ).val();
     return data;
 }
 

@@ -49,12 +49,12 @@
               jpost.openNewSliceDialog();
           }
       );
-      $( '#global_dataset_text' ).change(
+      $( '#global_dataset_text' ).keyup(
           function() {
               jpost.updateGlobalTables();
           }
       );
-      $( '#global_protein_text' ).change(
+      $( '#global_protein_text' ).keyup(
           function() {
               jpost.updateGlobalTables();
           }

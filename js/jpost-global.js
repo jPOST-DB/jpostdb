@@ -283,6 +283,10 @@ jpost.getFilterParameters = function() {
             }
         }
     );
+
+    data.dataset_keywords = $( '#global_dataset_text' ).val();
+    data.protein_keywords = $( '#global_protein_text' ).val();
+
     return data;
 }
 
@@ -294,7 +298,11 @@ jpost.createGlobalProteinTable = function( id, dataset ) {
             url: 'protein_table.php',
             columns: jpost.getProteinColumns(),
             parameters: function() {
-                return { datasets: [ dataset ] };
+                var params = jpost.getFilterParameters();
+                if( dataset !== null ) {
+                    params.datasets = [ dataset ];
+                }
+                return params;
             }
         },
         true
@@ -344,7 +352,6 @@ jpost.getProteinColumns = function() {
     ];
     return columns;
 }
-
 
 // update global tables
 jpost.updateGlobalTables = function() {

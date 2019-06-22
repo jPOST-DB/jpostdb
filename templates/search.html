@@ -43,6 +43,9 @@
       <button id="new_slice_button">New Slice...</button>
     </div>
     <script>
+      var dataset_keyword_id = -1;
+      var protein_keyword_id = -1;
+
       $( '#new_slice_button' ).click(
           function() {
               jpost.openTab( 'slice' );
@@ -51,12 +54,32 @@
       );
       $( '#global_dataset_text' ).keyup(
           function() {
-              jpost.updateGlobalTables();
+              if( dataset_keyword_id >= 0 ) {
+                  clearInterval( dataset_keyword_id );
+              }
+              dataset_keyword_id = setInterval(
+                  function() {
+                      jpost.updateGlobalTables();
+                      clearInterval( dataset_keyword_id );
+                      dataset_keyword_id = -1;
+                  },
+                  500
+              );
           }
       );
       $( '#global_protein_text' ).keyup(
           function() {
-              jpost.updateGlobalTables();
+              if( protein_keyword_id >= 0 ) {
+                  clearInterval( protein_keyword_id );
+              }
+              protein_keyword_id = setInterval(
+                  function() {
+                      jpost.updateGlobalTables();
+                      clearInterval( protein_keyword_id );
+                      protein_keyword_id = -1;
+                  },
+                  500
+              );
           }
       );
     </script>

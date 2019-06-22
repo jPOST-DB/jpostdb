@@ -6,6 +6,7 @@ table.tables = [];
 
 // id
 table.id = 1;
+table.dc = 1;
 
 // default width
 table.defaultWidth = 120;
@@ -24,8 +25,11 @@ table.createTable = function( name, parameters, downloadable ) {
     var tableId = table.setTableTag( name );
 
     var columns = parameters.columns;
+
     parameters.sort = null;
     parameters.direction = null;
+    parameters.id = null;
+
     table.tables[ name ] = parameters;
     table.setHeader( name, tableId, columns );
 
@@ -156,6 +160,8 @@ table.updateTable = function( name ) {
 
     $( '#' + bodyId ).html( '<div class="table_message">Now Loading...</div>' );
 
+    parameters.dc = table.dc;
+    table.dc++;
 
     var data = null;
     if( "parameters" in parameters ) {
@@ -164,8 +170,11 @@ table.updateTable = function( name ) {
     if( data === null ) {
         data = {};
     }
+    data.dc = parameters.dc;
+
     table.getPageParameters( name, data );
     table.getSortParameters( name, data );
+
     $.get(
         {
             url: parameters.url,
@@ -173,7 +182,10 @@ table.updateTable = function( name ) {
         }
     ).then( 
         function( response ) {
-            table.setTableData( name, response );
+            console.log( response );
+            if( response.dc == parameters.dc ) {
+                table.setTableData( name, response );
+            }
         }
     );
 }

@@ -74,6 +74,7 @@
          * gets the global table data
          */
         public static function getGlobalTableData( $api ) {
+            $dc = self::getParameter( 'dc' );
             $url = Config::$SPARQLIST_URL . $api;
             $parameters = array( 'line_count' => 1 );
             self::setTarget( $parameters );
@@ -102,6 +103,7 @@
                 $data = SparqlTool::postSparqList( $url, $parameters );
             }
             $result = array(
+                'dc'   => $dc,
                 'data' => $data,
                 'count' => $count,
                 'total' => $total

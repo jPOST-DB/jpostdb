@@ -225,8 +225,8 @@ jpost.getDatasetColumns = function() {
             title: 'Dataset ID',
             field: 'dataset_id',
             format: function( dataset ) {
-                var url = "javascript:jpost.openGlobalDataset( '" + dataset.dataset_id + "' )";
-                var tag = '<a href="' + url + '">' + dataset.dataset_id + '</a>';
+                var url = 'dataset.php?id=' + dataset.dataset_id;
+                var tag = '<a href="' + url + '" target="_blank">' + dataset.dataset_id + '</a>';
                 return tag;
             },
             width: 200
@@ -316,8 +316,8 @@ jpost.getProteinColumns = function() {
             title: 'Protein Name',
             field: 'full_name',
             format: function( protein ) {
-                var url = "javascript:jpost.openGlobalProtein( '" + protein.accession + "' )";
-                var tag = '<a href="' + url + '">' + protein.full_name + '</a>';
+                var url = 'protein.php?id=' + protein.accession;
+                var tag = '<a href="' + url + '" target="_blank">' + protein.full_name + '</a>';
                 return tag;
             },
             width: 350
@@ -449,8 +449,8 @@ jpost.getPeptideColumns = function() {
             title: 'Dataset ID',
             field: 'dataset_id',
             format: function( peptide ) {
-                var url = "javascript:jpost.openGlobalDataset( '" + peptide.dataset_id + "' )";
-                var tag = '<a href="' + url + '">' + peptide.dataset_id + '</a>';
+                var url = 'dataset.php?id=' + peptide.dataset_id;
+                var tag = '<a href="' + url + '" target="_blank">' + peptide.dataset_id + '</a>';
                 return tag;
             },
             width: 200
@@ -459,8 +459,8 @@ jpost.getPeptideColumns = function() {
             title: 'Protein Name',
             field: 'full_name',
             format: function( peptide ) {
-                var url = "javascript:jpost.openGlobalProtein( '" + peptide.accession + "' )";
-                var tag = '<a href="' + url + '">' + peptide.full_name + '</a>';
+                var url = 'protein?id=' + peptide.accession;
+                var tag = '<a href="' + url + '" target="_blank">' + peptide.full_name + '</a>';
                 return tag;
             },
             width: 350

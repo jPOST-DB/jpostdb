@@ -31,6 +31,15 @@ class HtmlTool {
         }
         echo self::$twig->render( $template, $parameters );
     }
+
+    /**
+     * gets the ID
+     * @return ID
+     */
+    public static function getId() {
+        $id = $_REQUEST[ 'id' ];
+        return $id;
+    }
 }
 
 ?>

@@ -80,16 +80,108 @@ input[type="text"] {
 }
 
 .header {
+  background: #fff;
+  border-bottom: solid 1px #e6e6e6;
+}
+
+.header_inner {
+  width: 1100px;
   height: 110px;
-  border-bottom: 1px solid lightgray;
-  width: 100%;
-  margin: 5px 0;
+  margin: 0 auto;
+}
+
+.header_inner:after {
+  clear: both;
+}
+
+.header_inner:after, .header_inner:before {
+  content: " ";
+  display: table;
+  overflow: hidden;
+}
+
+.header_left {
+  float: left;
+  height: 110px;
+}
+
+.header_logo {
+  display: inline-block;
+  padding: 5px 0 0;
+  vertical-align: middle;
+  border: none;
+  text-decoration: none;
+  color: inherit;
+}
+
+.header_logo > img {
+  vertical-align: middle;
 }
 
 .header_title {
-  display: block;
+  display: inline-block;
+  vertical-align: middle;
+  color: #007fb1;
+  font-size: 20px;
+  letter-spacing: 2px;
+  font-weight: 700;
+  font-family: arial,verdana,helvetica,sans-serif;
+  line-height: 1;
+}
+
+.header_right {
+  float: right;
+  height: 110px;
+}
+
+.header_nav {
+  height: 100%;
+}
+
+.header_nav:after {
+  clear: both;
+}
+
+.header_nav:after, .header_nav:before {
+  content: " ";
+  display: table;
+  overflow: hidden;
+}
+
+.header_nav_main {
+  height: 100%;
   float: left;
-  margin: 5px;
+  margin: 0;
+  padding: 0;
+}
+
+.header_nav_main > li {
+  display: inline-block;
+  height: 100%;
+  font-size: 18px;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.header_nav_main > li > a {
+  display: block;
+  padding-top: 28px;
+  min-width: 120px;
+  height: 100%;
+  background: #e6e6e6;
+  text-shadow: 1px 1px 0 #fff;
+  box-sizing: border-box;
+  border: none;
+  text-decoration: none;
+  color: inherit;
+}
+
+.header_nav_main > li > a:hover {
+  color: #fff;
+  background: #009250;
+  text-shadow: none;
 }
 
 .title_link {
@@ -98,23 +190,6 @@ input[type="text"] {
 
 .title_link:link, .title_link:visited, .title_link:hover, .title_link:active {
   color: grey;
-}
-
-.header_logo {
-  display: block;
-  float: left;
-  margin: 5px;
-  text-decoration: none;
-}
-
-.header_logo > h1 {
-  vertical-align: 'center';
-  height: 100px;
-}
-
-.header_logo > img {
-  width: 100px;
-  height: 100px;
 }
 
 .footer {
@@ -286,25 +361,6 @@ input[type="text"] {
 
 .information_table {
   margin-top: 25px;
-}
-
-.top_menu {
-  display: block;
-  float: left;
-  width: 150px;
-  height: 50px;
-  padding-top: 15px;
-  text-decoration: none;
-  text-align: center;
-  font-size: 20px;
-  margin-top: 45px;
-  color: navy;
-  font-weight: bold;
-  font-style: serif;
-}
-
-.top_menu:hover {
-  background-color: #cccccc;
 }
 
 .information_pane {

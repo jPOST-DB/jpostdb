@@ -71,6 +71,16 @@ input[type="text"] {
   width: 700px;
 }
 
+#filter_chart {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+#filter_chart_wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
 .component {
   margin: 0 auto;
 }

@@ -9,6 +9,8 @@ jpost.filters = [
     { title: 'Instrument',   name: 'instrument' }
 ];
 
+jpost.filterChartIds = {};
+
 // global tables
 jpost.globalTables = [];
 
@@ -85,20 +87,40 @@ jpost.addFilterChart = function( id ) {
     var type = $( '#form_selection' + id ).val();
     type = jpost.getPieChartTypeName( type );
     var stanzaId = 'filter_chart' + id;
-    var tag = '<div id="' + stanzaId + '" style="float: left;"></div>';
+    var clazz = 'pie_chart_stanza-' + type;
+    var tag = '<div id="' + stanzaId + '" class="'
+            + clazz + '"></div>';
     $( '#filter_chart' ).append( tag );
 
+    jpost.loadPieChart( stanzaId, type );
+}
+
+// load pie chart
+jpost.loadPieChart = function( stanzaId, type ) {
     var stanzas = [
         {
             name: 'stat_pie_chart',
             id: stanzaId,
             data: function() {
-                return {
-                    type: type
-                };
+                var data = { type: type };
+
+                var filter = jpost.getFilterParameters();
+                jpost.filters.forEach(
+                    function( item ) {
+                        var name = item.name;
+                        if( name in filter ) {
+                            var value = filter[ name ];
+                            if( value !== null && value !== undefined && value.length !== 0 ) {
+                                data[ name ] = value.join( ',' );
+                            }
+                        }
+                    }
+                );
+                return data;
             }
         }
     ];
+    jpost.filterChartIds[ stanzaId ] = type;    
     jpost.loadStanzas( stanzas );
 }
 
@@ -146,7 +168,10 @@ jpost.addFormDeleteButton = function( id ) {
 // delete form
 jpost.deleteForm = function( id ) {
     $( '#filter_form_line' + id ).remove();
-    $( '#filter_chart' + id ).remove();
+    var stanzaId = 'filter_chart' + id;
+    $( '#' + stanzaId ).remove();
+    delete jpost.filterChartIds[ stanzaId ];
+
     jpost.updateGlobalTables();
 }
 
@@ -186,19 +211,7 @@ jpost.updateFilterForm = function( id ) {
     $( '#' + stanzaId ).html( '' );
 
     var type = jpost.getPieChartTypeName( item );
-
-    var stanzas = [
-        {
-            name: 'stat_pie_chart',
-            id: stanzaId,
-            data: function() {
-                return {
-                    type: type
-                };
-            }
-        }
-    ];
-    jpost.loadStanzas( stanzas );    
+    jpost.loadPieChart( stanzaId, type );
 }
 
 // create dataset table
@@ -275,6 +288,22 @@ jpost.getFilterParameters = function() {
 
             if( name in names ) {
                 name = names[ name ];
+                if( name === 'species' ) {
+                    if( value.indexOf( 'TAX_' ) !== 0 ) {
+                        name = 'species_s';
+                        if( !( name in data ) ) {
+                            data[ name ] = [];
+                        }
+                    }
+                }
+                else if( name == 'disease' ) {
+                    if( value.indexOf( 'DOID_' ) !== 0 ) {
+                        name = 'disease_s';
+                        if( !( name in data ) ) {
+                            data[ name ] = [];
+                        }
+                    }
+                }
                 data[ name ].push( value );
             }
             else {
@@ -360,6 +389,27 @@ jpost.updateGlobalTables = function() {
 
     table.setPageNumber( 'proteins', 1 );    
     table.updateTable( 'proteins');
+
+    jpost.updatePieCharts();
+}
+
+// update pie charts
+jpost.updatePieCharts = function() {
+    for( id in jpost.filterChartIds ) {
+        jpost.loadPieChart( id, jpost.filterChartIds[ id ] );
+    }
+}
+
+jpost.setPieChartFilter = function() {
+    var filter = jpost.getFilterParameters();
+    console.log( filter );
+    if( filter.species === null || filter.species.length === 0 ) {
+        $( '.pie_chart' ).removeAttr( 'species' );
+    }
+    else {
+        var species = filter.species.join( ',' );
+        $( '.pie_chart' ).attr( 'species',  species );
+    }
 }
 
 // open global dataset

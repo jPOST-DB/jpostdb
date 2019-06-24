@@ -286,12 +286,14 @@ input[type="text"] {
   font-weight: bold;
 }
 
-.form_line {
+.form_line, .slice_dialog_form_line {
   vertical-align: middle;
   padding: 5px;
   display: -webkit-flex;
   display: flex;  
 }
+
+
 
 .filter_form_line {
   vertical-align: middle;

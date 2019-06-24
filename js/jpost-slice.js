@@ -75,7 +75,7 @@ jpost.updateTabs = function() {
             $( '.slices' ).append( '<option value="' + slice.id + '">' + slice.name + '</option>' );
         }
     );
-    $( '#slice_tab_field' ).append( '<a href="javascript:jpost.openNewSliceDialog()" class="tab_link title_link tab_link_short"><div>+</div></a>' );
+    $( '#slice_tab_field' ).append( '<a href="javascript:jpost.openNewSliceDialogWithInit()" class="tab_link title_link tab_link_short"><div>+</div></a>' );
     $( '#slice_tab_field' ).append( '<button id="compare_button">Compare</button>' );
     $( '#compare_button' ).click( jpost.onCompareButton );
 }
@@ -232,9 +232,16 @@ jpost.findSlice = function( id ) {
     return dataset;
 }
 
+jpost.openNewSliceDialogWithInit = function() {
+    $( '#slice_dialog_filter_form' ).html( '' );
+    jpost.openNewSliceDialog();
+}
+
 // open new slice dialog
 jpost.openNewSliceDialog = function() {
     jpost.slice = null;
+    $( '#dialog_slice_name' ).val( '' );
+    $( '#dialog_slice_description' ).val( '' );
     jpost.updateDialogTable();
     $( '#slice_dialog' ).dialog(
         {
@@ -387,14 +394,10 @@ jpost.updateFilterFormInDialog = function( id ) {
 }
 
 jpost.updateDialogTable = function() {
-    var name = '';
-    var description = '';
     if( jpost.slice !== null ) {
         name = jpost.slice.name;
         description = jpost.slice.description;
     }
-    $( '#dialog_slice_name' ).val( name );
-    $( '#dialog_slice_description' ).val( description ); 
     table.updateTable( 'slice_dialog_table' );
 }
 

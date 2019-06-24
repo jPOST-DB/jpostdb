@@ -323,6 +323,66 @@ jpost.getFilterParameters = function() {
     return data;
 }
 
+// 
+jpost.addFilter = function( type, value, text  ) {
+    var parameters = $( '#filter_form' ).serializeArray();
+    var filter = jpost.getFilterParameters();
+    var values = [];
+    if( type in filter ) {
+        values = filter[ type ];
+    }
+
+    if( values.indexOf( value ) >= 0 ) {
+        return;
+    }
+    values.push( value );
+
+    var flag = false;
+    parameters.forEach(
+        function( parameter ) {
+            var id = parameter.name;
+            var item = parameter.value;
+
+            if( item === type && !flag ) {
+                id = id.replace( 'filter', '' );
+                id = 'form_selection' + id + '_value';
+
+                var option = new Option( text, value, true, true );
+                $( '#' + id ).append( option ).trigger( 'change' );
+                $( '#' + id ).trigger( 
+                    {
+                        type: 'select2:select',
+                        params: {
+                            data: values
+                        }
+                    }
+                );
+                flag = true;                
+            }
+        }
+    );
+}
+
+jpost.clearFilters = function( type ) {
+    var parameters = $( '#filter_form' ).serializeArray();
+    var flag = false;
+    parameters.forEach(
+        function( parameter ) {
+            var id = parameter.name;
+            var item = parameter.value;
+
+            if( item === type && !flag ) {
+                id = id.replace( 'filter', '' );
+                id = 'form_selection' + id + '_value';
+
+                $( '#' + id ).val( null ).trigger( 'change' );
+                flag = true;                
+            }
+        }
+    );    
+}
+
+
 // create protein table
 jpost.createGlobalProteinTable = function( id, dataset ) {
     table.createTable(
@@ -410,7 +470,6 @@ jpost.updatePieCharts = function() {
 
 jpost.setPieChartFilter = function() {
     var filter = jpost.getFilterParameters();
-    console.log( filter );
     if( filter.species === null || filter.species.length === 0 ) {
         $( '.pie_chart' ).removeAttr( 'species' );
     }

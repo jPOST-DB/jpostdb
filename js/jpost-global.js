@@ -1,8 +1,8 @@
 // filter
 jpost.filters = [
     { title: 'Species',      name: 'species' },
-    { title: 'Sample type',  name: 'sampleType' },
-    { title: 'Cell line',    name: 'cellLine' },
+    { title: 'Sample type',  name: 'sample_type' },
+    { title: 'Cell line',    name: 'cell_line' },
     { title: 'Organ',        name: 'organ' },
     { title: 'Disease',      name: 'disease' },
     { title: 'Modification', name: 'modification' },
@@ -73,12 +73,6 @@ jpost.addFormSelection = function( id ) {
 // get pie chart type name
 jpost.getPieChartTypeName = function( type ) {
     var chartType = type;
-    if( chartType === 'sampleType' ) {
-        chartType = 'sample_type';
-    }
-    else if( chartType === 'cellLine' ) {
-        chartType = 'cell_line';
-    }
     return chartType;
 }
 
@@ -180,6 +174,12 @@ jpost.updateFilterForm = function( id ) {
     $( '#form_selection' + id + '_value' ).css( 'display', 'none' );
 
     var item = $( '#form_selection' + id ).val();
+    if( item === 'sample_type' ) {
+        item = 'sampleType';
+    }
+    if( item === 'cell_line' ) {
+        item = 'cellLine';
+    }
 
     $( '#form_selection' + id + '_value' ).val( null ).trigger( 'change' );
     $( '#form_selection' + id + '_value' ).select2(
@@ -197,6 +197,7 @@ jpost.updateFilterForm = function( id ) {
                         }
                     );
                     return { results: array };
+
                 }
             },
             width: '100%',
@@ -340,6 +341,7 @@ jpost.addFilter = function( type, value, text  ) {
     var flag = false;
     parameters.forEach(
         function( parameter ) {
+            console.log( parameter );
             var id = parameter.name;
             var item = parameter.value;
 

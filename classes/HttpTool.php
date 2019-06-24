@@ -43,7 +43,7 @@
          * sets filter parameters
          */
         public static function setFilterParameters( &$parameters ) {
-            $filters = array( 'species', 'sampleType', 'cellLine', 'organ', 'disease', 'modification', 'instrument' );
+            $filters = array( 'species', 'sample_type', 'cell_line', 'organ', 'disease', 'modification', 'instrument' );
             foreach( $filters as $filter ) {
                 $array = self::getParameter( $filter );
                 if( $array !== null ) {

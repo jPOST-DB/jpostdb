@@ -174,6 +174,7 @@ jpost.updateFilterForm = function( id ) {
     $( '#form_selection' + id + '_value' ).css( 'display', 'none' );
 
     var item = $( '#form_selection' + id ).val();
+    var orgItem = item;
     if( item === 'sample_type' ) {
         item = 'sampleType';
     }
@@ -211,7 +212,7 @@ jpost.updateFilterForm = function( id ) {
     var stanzaId = 'filter_chart' + id;
     $( '#' + stanzaId ).html( '' );
 
-    var type = jpost.getPieChartTypeName( item );
+    var type = jpost.getPieChartTypeName( orgItem );
     jpost.loadPieChart( stanzaId, type );
 }
 

@@ -1,6 +1,10 @@
 body {
   padding: 0;
   margin: 0;
+  color: #444;
+  font-family: arial, verdana, helvetica, sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
 }
 
 article {
@@ -145,7 +149,6 @@ input[type="text"] {
   font-size: 20px;
   letter-spacing: 2px;
   font-weight: 700;
-  font-family: arial,verdana,helvetica,sans-serif;
   line-height: 1;
 }
 

@@ -21,8 +21,8 @@ jpost.openTab = function( name ) {
 jpost.loadStanzas = function( stanzas ) {
     stanzas.forEach(
         function( stanza ) {
-            var url = 'https://globe.jpostdb.org/stanza?stanza=' + stanza.name;
-//            var url = 'stanza.php?stanza=' + stanza.name;;
+//            var url = 'https://globe.jpostdb.org/stanza?stanza=' + stanza.name;
+            var url = 'stanza.php?stanza=' + stanza.name;;
             var params = stanza.data();
             var width = 250;
             var height = 250;

@@ -4,24 +4,23 @@
   {{ include( "head.html" ) }}
   <body>
     <header class="header">
-      <div class="component">
-        <div style="float: left;">
+      <div class="header_inner">
+        <div class="header_left">
           <a href="https://jpostdb.org/" class="header_logo">
-            <img src="images/logo.svg" />
-          </a>
-          <a href="/" class="header_title title_link">
-            <h1>jPOSTdb</h1>
+            <img src="images/logo.svg" width="100" height="100" />
+            <h1 class="header_title">DATABASE</h1>
           </a>
         </div>
-        <div style="float: left; margin-left: 30px;">
-          <a href="javascript:jpost.openTab( 'search' )" class="top_menu">Search</a>
-          <a href="javascript:jpost.openTab( 'slice' )" class="top_menu">Slice</a>
-          <a href="javascript:jpost.openTab( 'compare' )" class="top_menu">Compare</a>
-          <a href="javascript:jpost.openTab( 'help' )" class="top_menu">Help</a>
-          <a href="javascript:jpost.openTab( '' )" class="top_menu" style="display: none;">Etc</a>
-          <div both="clear: both;"></div>
+        <div class="header_right">
+          <nav class="header_nav">
+            <ul class="header_nav_main">
+              <li><a href="javascript:jpost.openTab( 'search' )" class="top_menu">Search</a></li>
+              <li><a href="javascript:jpost.openTab( 'slice' )" class="top_menu">Slice</a></li>
+              <li><a href="javascript:jpost.openTab( 'compare' )" class="top_menu">Compare</a></li>
+              <li><a href="javascript:jpost.openTab( 'help' )" class="top_menu">Help</a></li>
+            </ul>
+          </nav>
         </div>
-        <div style="clear: both;"></div>
       </div>
     </header>
     <article class="main">

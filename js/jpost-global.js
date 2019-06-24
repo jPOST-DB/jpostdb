@@ -224,6 +224,10 @@ jpost.createGlobalDatasetTable = function( id ) {
             parameters: function() {
                 var params = jpost.getFilterParameters();
                 return params;
+            },
+            countClass: 'dataset_table_tab_button',
+            countUpdate: function( count ) {
+                return 'Dataset (' + count + ')';
             }
         },
         true
@@ -332,7 +336,11 @@ jpost.createGlobalProteinTable = function( id, dataset ) {
                     params.datasets = [ dataset ];
                 }
                 return params;
-            }
+            },
+            countClass: 'protein_table_tab_button',
+            countUpdate: function( count ) {
+                return 'Protein (' + count + ')';
+            }            
         },
         true
     );
@@ -445,6 +453,10 @@ jpost.createDatasetProteinTable = function( id, dataset ) {
             columns: jpost.getProteinColumns(),
             parameters: function() {
                 return { datasets: [ dataset ] };
+            },
+            countClass: 'protein_table_tab_button',
+            countUpdate: function( count ) {
+                return 'Protein (' + count + ')';
             }
         }
     );
@@ -459,6 +471,10 @@ jpost.createDatasetPeptideTable = function( id, dataset ) {
             columns: jpost.getPeptideColumns(),
             parameters: function() {
                 return { datasets: [ dataset ] };
+            },
+            countClass: 'peptide_table_tab_button',
+            countUpdate: function( count ) {
+                return 'Peptide (' + count + ')';
             }
         }
     );
@@ -474,6 +490,10 @@ jpost.createProteinPeptideTable = function( id, protein ) {
             columns: jpost.getPeptideColumns(),
             parameters: function() {
                 return { proteins: [ protein ] };
+            },
+            countClass: 'peptide_table_tab_button',
+            countUpdate: function( count ) {
+                return 'Peptide (' + count + ')';
             }
         }
     );
@@ -549,6 +569,10 @@ jpost.createProteinPsmTable = function( id, protein ) {
             columns: jpost.getPsmColumns(),
             parameters: function() {
                 return { proteins: [ protein ] };
+            },
+            countClass: 'psm_table_tab_button',
+            countUpdate: function( count ) {
+                return 'Psm (' + count + ')';
             }
         }
     );

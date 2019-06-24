@@ -182,7 +182,6 @@ table.updateTable = function( name ) {
         }
     ).then( 
         function( response ) {
-            console.log( response );
             if( response.dc == parameters.dc ) {
                 table.setTableData( name, response );
             }
@@ -212,6 +211,8 @@ table.setTableData = function( name, response ) {
     table.setPageSelection( name, response );
     table.setPageButtons( name, response );   
     table.setTableDataList( name, response );
+    table.setEtc( name, response );    
+    table.setTableCell( name, response );
 }
 
 // set page selection
@@ -359,6 +360,19 @@ table.setTableDataList = function( name, response ) {
             row++;
         }
     );
+}
+
+// set etc
+table.setEtc = function( name, response ) {
+    var parameters = table.tables[ name ];
+    if( 'countClass' in parameters ) {
+        var count = response.count;
+        var text = count;
+        if( 'countUpdate' in parameters ) {
+            text = parameters.countUpdate( count );
+        }
+        $( '.' + parameters.countClass ).html( text );
+    }
 }
 
 // set table cell

@@ -28,6 +28,16 @@ button {
   cursor: hand;
 }
 
+a {
+  color: #007fb1;
+  border: none;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
 button:hover {
   background-color: gray;
 }

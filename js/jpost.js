@@ -36,9 +36,10 @@ jpost.loadStanzas = function( stanzas ) {
                 var string = key + '=' + encodeURI( params[ key ] );
                 url += '&' + string;
             }
-            var tag = '<iframe src="' + url + '" width="' + width + '" height="' + height + '" style="border: none;" scrolling="no" frameborder="no"></iframe>';
-//            $( '#' + stanza.id ).load( url );            
-            $( '#' + stanza.id ).html( tag );
+//            var tag = '<iframe src="' + url + '" width="' + width + '" height="' + height + '" style="border: none;" scrolling="no" frameborder="no"></iframe>';
+//            $( '#' + stanza.id ).html( tag );
+            $( '#' + stanza.id ).load( url );            
+
         }
     );
 }

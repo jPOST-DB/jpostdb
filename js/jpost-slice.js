@@ -130,6 +130,8 @@ jpost.addSliceContens = function( slice ) {
     $( '#' + mainId ).append( '<div id="' + id + '_chromosome"></div>' );
     $( '#' + mainId ).append( '<h3>Protein Existence</h3>' );
     $( '#' + mainId ).append( '<div id="' + id + '_protein"></div>' );
+    $( '#' + mainId ).append( '<h3>Pathway Mapping</h3>' );
+    $( '#' + mainId ).append( '<div id="' + id + '_kegg"></div>' );
     jpost.loadSliceStanzas( slice );
 
     $( '#' + mainId ).append( '<div id="' + id + '_tab_buttons" class="tab_buttons_line"></div>' );
@@ -184,6 +186,15 @@ jpost.loadSliceStanzas = function( slice ) {
         {
             name: 'protein_evidence',
             id: id + '_protein',
+            width: 900,
+            height: 500,                  
+            data:  function() {
+                return { dataset: datasets }
+            }
+        },
+        {
+            name: 'kegg_mapping_form',
+            id: id + '_kegg',
             width: 900,
             height: 500,                  
             data:  function() {
@@ -769,8 +780,8 @@ jpost.compareSlices = function() {
                     height: 800,
                     data: function() {
                         return {
-                            datasets1: slice1.datasets.join( ' ' ),
-                            datasets2: slice2.datasets.join( ' ' ),
+                            dataset1: slice1.datasets.join( ' ' ),
+                            dataset2: slice2.datasets.join( ' ' ),
                             slice1: slice1.name,
                             slice2: slice2.name
                         };

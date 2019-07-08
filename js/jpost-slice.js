@@ -290,6 +290,10 @@ jpost.addFormInDialog = function() {
     jpost.addFormTextInDialog( id );
     jpost.addFormDeleteButtonInDialog( id );
     jpost.updateFilterFormInDialog( id );
+
+    if( jpost.getNextFormTypeInDialog() === null ) {
+        $( '#slice_dialog_form_add_button' ).prop( 'disabled', true );
+    }
 }
 
 // add form selection
@@ -311,6 +315,8 @@ jpost.addFormSelectionInDialog = function( id ) {
             jpost.updateFilterFormInDialog( id );
         }
     );
+
+    jpost.updateDialogFilterSelections();
 }
 
 // gets the next form type
@@ -332,11 +338,37 @@ jpost.getNextFormTypeInDialog = function() {
             }
         }
     );
-    if( value === null ) {
-        value = jpost.filters[ 0 ].name;        
-    }
     return value;
 }
+
+// update filter selections
+jpost.updateDialogFilterSelections = function() {
+    var parameters = $( '#slice_dialog_filter_form' ).serializeArray();
+    var values = {};
+    var filters = [];
+    parameters.forEach(
+        function( parameter ) {
+            values[ parameter.name ] = parameter.value;
+            filters.push( parameter.value );
+        }
+    );
+
+    for( var i = 0; i < jpost.dialogFormCount; i++ ) {
+        var id = i;
+        if( ( 'filter' + id ) in values ) {
+            $( '#slice_dialog_form_selection' + id + ' option' ).prop( 'disabled', false );
+            jpost.filters.forEach(
+                function( filter ) {
+                    if( filters.indexOf( filter.name ) >= 0 ) {
+                        $( '#slice_dialog_form_selection' + id + ' option[value="' + filter.name + '"]' ).prop( 'disabled', true );
+                    }
+                }
+            );
+            $( '#slice_dialog_form_selection' + id + ' option:selected' ).prop( 'disabled', false );
+        }
+    }
+}
+
 
 // adds form text
 jpost.addFormTextInDialog = function( id ) {
@@ -358,6 +390,10 @@ jpost.addFormDeleteButtonInDialog = function( id ) {
 jpost.deleteFormInDialog = function( id ) {
     $( '#slice_dialog_filter_form_line' + id ).remove();
     jpost.updateDialogTable();
+
+    if( jpost.getNextFormTypeInDialog() !== null ) {
+        $( '#slice_dialog_form_add_button' ).prop( 'disabled', false );
+    }
 }
 
 // update filter form
@@ -391,6 +427,8 @@ jpost.updateFilterFormInDialog = function( id ) {
 
     $( '#slice_dialog_form_selection' + id + '_value' ).css( 'display', 'inline' );
     $( '#slice_dialog_form_selection' + id + '_value' ).change( jpost.updateDialogTable );
+
+    jpost.updateDialogFilterSelections();
 }
 
 jpost.updateDialogTable = function() {

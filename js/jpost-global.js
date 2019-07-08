@@ -47,6 +47,10 @@ jpost.addForm = function() {
     jpost.addFormDeleteButton( id );
     jpost.addFilterChart( id );
     jpost.updateFilterForm( id );
+
+    if( jpost.getNextFormType() === null ) {
+        $( '#form_add_button' ).prop( 'disabled', true );
+    }
 }
 
 // add form selection
@@ -68,6 +72,7 @@ jpost.addFormSelection = function( id ) {
             jpost.updateFilterForm( id );
         }
     );
+    jpost.updateFilterSelections();
 }
 
 // get pie chart type name
@@ -137,9 +142,6 @@ jpost.getNextFormType = function() {
             }
         }
     );
-    if( value === null ) {
-        value = jpost.filters[ 0 ].name;        
-    }
     return value;
 }
 
@@ -167,6 +169,10 @@ jpost.deleteForm = function( id ) {
     delete jpost.filterChartIds[ stanzaId ];
 
     jpost.updateGlobalTables();
+
+    if( jpost.getNextFormType() !== null ) {
+        $( '#form_add_button' ).prop( 'disabled', false );
+    }
 }
 
 // update filter form
@@ -214,6 +220,36 @@ jpost.updateFilterForm = function( id ) {
 
     var type = jpost.getPieChartTypeName( orgItem );
     jpost.loadPieChart( stanzaId, type );
+
+    jpost.updateFilterSelections();
+}
+
+// update filter selections
+jpost.updateFilterSelections = function() {
+    var parameters = $( '#filter_form' ).serializeArray();
+    var values = {};
+    var filters = [];
+    parameters.forEach(
+        function( parameter ) {
+            values[ parameter.name ] = parameter.value;
+            filters.push( parameter.value );
+        }
+    );
+
+    for( var i = 0; i < jpost.formCount; i++ ) {
+        var id = i;
+        if( ( 'filter' + id ) in values ) {
+            $( '#form_selection' + id + ' option' ).prop( 'disabled', false );
+            jpost.filters.forEach(
+                function( filter ) {
+                    if( filters.indexOf( filter.name ) >= 0 ) {
+                        $( '#form_selection' + id + ' option[value="' + filter.name + '"]' ).prop( 'disabled', true );
+                    }
+                }
+            );
+            $( '#form_selection' + id + ' option:selected' ).prop( 'disabled', false );
+        }
+    }
 }
 
 // create dataset table
@@ -325,7 +361,7 @@ jpost.getFilterParameters = function() {
     return data;
 }
 
-// 
+// adds filter
 jpost.addFilter = function( type, value, text  ) {
     var parameters = $( '#filter_form' ).serializeArray();
     var filter = jpost.getFilterParameters();

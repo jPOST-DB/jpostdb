@@ -135,11 +135,11 @@ jpost.addSliceContens = function( slice ) {
     jpost.loadSliceStanzas( slice );
 
     $( '#' + mainId ).append( '<div id="' + id + '_tab_buttons" class="tab_buttons_line"></div>' );
-    tag = '<button id="' + id + '_dataset_tab_button" class="' + id + '_tab_button tab_button tab_active">Dataset</button>';
+    tag = '<button id="' + id + '_dataset_tab_button" class="' + id + '_tab_button tab_button tab_active dataset_tab_button">Dataset</button>';
     $( '#' + id + '_tab_buttons' ).append( tag );
-    tag = '<button id="' + id + '_protein_tab_button" class="' + id + '_tab_button tab_button">Protein</button>';
+    tag = '<button id="' + id + '_protein_tab_button" class="' + id + '_tab_button tab_button protein_tab_button">Protein</button>';
     $( '#' + id + '_tab_buttons' ).append( tag );
-    tag = '<button id="' + id + '_peptide_tab_button" class="' + id + '_tab_button tab_button">Peptide</button>';
+    tag = '<button id="' + id + '_peptide_tab_button" class="' + id + '_tab_button tab_button peptide_tab_button">Peptide</button>';
     $( '#' + id + '_tab_buttons' ).append( tag );
     $( '#' + id + '_tab_buttons' ).append( '<button class="fill_blank"></button>' );
     $( '#' + id + '_dataset_tab_button' ).click( 
@@ -551,6 +551,10 @@ jpost.createSliceDatasetTable = function( slice ) {
                     'datasets': slice.datasets
                 }
                 return params;
+            },
+            countClass: 'dataset_tab_button',
+            countUpdate: function( count ) {
+                return 'Dataset (' + count + ')';
             }
         },
         true
@@ -607,6 +611,10 @@ jpost.createSliceProteinTable = function( slice ) {
             columns: jpost.getSliceProteinColumns(),
             parameters: function() {
                 return { datasets: slice.datasets };
+            },
+            countClass: 'protein_tab_button',
+            countUpdate: function( count ) {
+                return 'Protein (' + count + ')';
             }
         },
         true
@@ -667,6 +675,10 @@ jpost.createSlicePeptideTable = function( slice ) {
             columns: jpost.getSlicePeptideColumns(),
             parameters: function() {
                 return { datasets: slice.datasets };
+            },
+            countClass: 'peptide_tab_button',
+            countUpdate: function( count ) {
+                return 'Peptide (' + count + ')';
             }
         }
     );

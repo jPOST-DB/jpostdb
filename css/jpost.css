@@ -67,11 +67,6 @@ input[type="text"] {
   padding: 20px;
 }
 
-#information_pane {
-  margin: 10px;
-  padding: 0;
-}
-
 #tab_buttons_line {
   display: -webkit-flex;
   display: flex;
@@ -109,7 +104,7 @@ input[type="text"] {
 }
 
 .header_inner {
-  width: 1100px;
+  width: 1300px;
   height: 110px;
   margin: 0 auto;
 }
@@ -234,8 +229,7 @@ input[type="text"] {
 .main_field {
   background-color: white;
   padding: 0;
-  max-width: 1000px;
-  min-width: 600px;
+  width: 1300px;
   margin: 0 auto;
   border: none;
 }
@@ -243,14 +237,11 @@ input[type="text"] {
 .main_tab_field {
   background-color: white;
   padding: 20;
-  max-width: 1000px;
-  min-width: 600px;
+  width: 1300px;
   margin: 0 auto;
   border: none;
   display: none;
 }
-
-
 
 .tab_link {
   display: block;
@@ -391,7 +382,7 @@ input[type="text"] {
 }
 
 .information_pane {
-  margin: 10px;
+  margin: 10px 0;
   padding: 0;
 }
 
@@ -421,7 +412,7 @@ input[type="text"] {
 }
 
 .filter_pane {
-  margin: 20px;
+  margin: 20px 0;
   padding: 0;
   border: solid 1px lightgray;
   border-radius: 3px;

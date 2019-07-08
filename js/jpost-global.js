@@ -366,6 +366,7 @@ jpost.addFilter = function( type, value, text  ) {
     );
 }
 
+// clear filters
 jpost.clearFilters = function( type ) {
     var parameters = $( '#filter_form' ).serializeArray();
     var flag = false;
@@ -384,7 +385,6 @@ jpost.clearFilters = function( type ) {
         }
     );    
 }
-
 
 // create protein table
 jpost.createGlobalProteinTable = function( id, dataset ) {

@@ -5,6 +5,8 @@ jpost.slice = null;
 jpost.idCount = 0;
 jpost.dialogFormCount = 0;
 
+jpost.sliceCheckingFlag = false;
+
 // get selected slice
 jpost.getSelectedSlice = function() {
     return jpost.slice;
@@ -59,6 +61,14 @@ jpost.saveSlices = function() {
 
 // update tabs
 jpost.updateTabs = function() {
+    var checkedSlices = jpost.getCheckedSlices();
+    var checkedSliceIds = [];
+    checkedSlices.forEach( 
+        function( sliceElement ) {
+            checkedSliceIds.push( sliceElement.id );
+        }
+    );
+
     $( '#slice_tab_field' ).html( '' );
     $( '#slice_information_pane' ).html( '' );
     $( '.slices' ).html( '' );
@@ -69,15 +79,30 @@ jpost.updateTabs = function() {
                 tab = '<a class="tab_link title_link active_tab_link" ';
             }
             tab = tab + 'href="javascript:jpost.selectSlice( ' + slice.id + '  )"><div>' + slice.name
-                + '</div><div><input type="checkbox" class="slice_tab_check" name="slices[]" value="' + slice.id + '" /></div></a>';
+                + '</div><div><input id="slice_checkbox' + slice.id + '" type="checkbox" class="slice_tab_check" name="slices[]" value="' + slice.id + '" /></div></a>';
             $( '#slice_tab_field' ).append( tab );
             jpost.addSliceContens( slice );
             $( '.slices' ).append( '<option value="' + slice.id + '">' + slice.name + '</option>' );
+            $( '#slice_checkbox' + slice.id ).change( jpost.onCheckSlice )
+            if( checkedSliceIds.indexOf( slice.id ) >= 0 ) {
+                $( '#slice_checkbox' + slice.id ).prop( 'checked', true );
+            }
         }
     );
     $( '#slice_tab_field' ).append( '<a href="javascript:jpost.openNewSliceDialogWithInit()" class="tab_link title_link tab_link_short"><div>+</div></a>' );
     $( '#slice_tab_field' ).append( '<button id="compare_button">Compare</button>' );
     $( '#compare_button' ).click( jpost.onCompareButton );
+}
+
+// on check
+jpost.onCheckSlice = function() {
+    jpost.sliceCheckingFlag = true;
+    setTimeout( 
+        function() {
+            jpost.sliceCheckingFlag = false;
+        },
+        1000
+    );
 }
 
 // add slice contents
@@ -94,7 +119,7 @@ jpost.addSliceContens = function( slice ) {
     tag = '<div id="' + subId + '" style="display: none;"></div>';
     $( '#' + id ).append( tag );
 
-    $( '#' + mainId ).append( '<h2>' + slice.name  + '</h2>' );
+    $( '#' + mainId ).append( '<h2 style="float: left;">' + slice.name  + '</h2>' );
     $( '#' + mainId ).append( '<p>' + slice.description  + '</p>' );
 
     var buttonId = id + '_buttons';
@@ -125,6 +150,7 @@ jpost.addSliceContens = function( slice ) {
             jpost.removeSlice( slice );
         }
     );   
+    $( '#' + mainId ).append( '<div style="clear: both;"></div>' );
 
     $( '#' + mainId ).append( '<h3>Chromosome Info.</h3>' );
     $( '#' + mainId ).append( '<div id="' + id + '_chromosome"></div>' );
@@ -207,6 +233,10 @@ jpost.loadSliceStanzas = function( slice ) {
 
 // select slice
 jpost.selectSlice = function( id ) {
+    if( jpost.sliceCheckingFlag ) {
+        return;
+    }
+
     var slice =  jpost.findSlice( id );
     jpost.slice = slice;
     jpost.saveSlices();

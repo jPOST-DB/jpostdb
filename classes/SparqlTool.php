@@ -15,6 +15,7 @@
             );
             $url2 = $url . '?' . $data;
             $contents = file_get_contents( $url2, false, stream_context_create( $options ) );
+
             $data = json_decode( $contents, true );
             $keys = $data[ 'head' ][ 'vars' ];
             $bindings = $data[ 'results' ][ 'bindings' ];

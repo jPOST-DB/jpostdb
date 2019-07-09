@@ -347,14 +347,45 @@ jpost.openNewSliceDialog = function() {
                         alert( "No datasets are selected.")
                         return;
                     }
-                    var slice = {
-                        name: name,
-                        description: description,
-                        datasets: datasets
-                    };
-                    jpost.addSlice( slice );
-                    jpost.selectSlice( slice.id );
-                    $( this ).dialog( 'close' );
+
+                    var string = datasets.join( ' ' );
+
+                    var dialog = $( this );
+
+                    $.ajax(
+                        {
+                            url: 'get_species.php',
+                            type: 'GET',
+                            data: {
+                                dataset: string
+                            },
+                            success: function( response ) {
+                                var species = JSON.parse( response );
+                                var flag = true;
+                                if( species.length > 1 ) {
+                                    var message = 'There are multiple species in selected datasets. [' + species.join( ',' ) + ']' + "\n"
+                                                + 'Are you sure to create a slice?';
+                                    if( window.confirm( message ) ) {
+                                        flag = true;
+                                    }
+                                    else {
+                                        flag = false;
+                                    }
+                                }
+
+                                if( flag ) {
+                                    var slice = {
+                                        name: name,
+                                        description: description,
+                                        datasets: datasets
+                                    };
+                                    jpost.addSlice( slice );
+                                    jpost.selectSlice( slice.id );
+                                    dialog.dialog( 'close' );
+                                }
+                            }
+                        }
+                    );
                 },
                 Cancel: function() {
                     $( this ).dialog( 'close' );
@@ -967,11 +998,41 @@ jpost.editSlice = function( slice ) {
                         alert( "No datasets are selected.")
                         return;
                     }
-                    jpost.slice.name = name;
-                    jpost.slice.description = description;
-                    jpost.datasets = datasets;
-                    jpost.selectSlice( jpost.slice.id );
-                    $( this ).dialog( 'close' );
+
+                    var string = datasets.join( ' ' );
+                    var dialog = $( this );
+
+                    $.ajax(
+                        {
+                            url: 'get_species.php',
+                            type: 'GET',
+                            data: {
+                                dataset: string
+                            },
+                            success: function( response ) {
+                                var species = JSON.parse( response );
+                                var flag = true;
+                                if( species.length > 1 ) {
+                                    var message = 'There are multiple species in selected datasets. [' + species.join( ',' ) + ']' + "\n"
+                                                + 'Are you sure to create a slice?';
+                                    if( window.confirm( message ) ) {
+                                        flag = true;
+                                    }
+                                    else {
+                                        flag = false;
+                                    }
+                                }
+
+                                if( flag ) {
+                                    jpost.slice.name = name;
+                                    jpost.slice.description = description;
+                                    jpost.slice.datasets = datasets;
+                                    jpost.selectSlice( jpost.slice.id );                                    
+                                    dialog.dialog( 'close' );
+                                }
+                            }
+                        }
+                    );
                 },
                 Cancel: function() {
                     $( this ).dialog( 'close' );

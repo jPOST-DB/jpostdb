@@ -87,7 +87,7 @@ jpost.addFilterChart = function( id ) {
     type = jpost.getPieChartTypeName( type );
     var stanzaId = 'filter_chart' + id;
     var clazz = 'pie_chart_stanza-' + type;
-    var tag = '<div id="' + stanzaId + '" class="'
+    var tag = '<div id="' + stanzaId + '" class="pie_chart_stanza '
             + clazz + '"></div>';
     $( '#filter_chart' ).append( tag );
 
@@ -378,7 +378,6 @@ jpost.addFilter = function( type, value, text  ) {
     var flag = false;
     parameters.forEach(
         function( parameter ) {
-            console.log( parameter );
             var id = parameter.name;
             var item = parameter.value;
 

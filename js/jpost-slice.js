@@ -234,7 +234,63 @@ jpost.findSlice = function( id ) {
 
 jpost.openNewSliceDialogWithInit = function() {
     $( '#slice_dialog_filter_form' ).html( '' );
+    $( '#slice_keyword_text' ).val( '' );
     jpost.openNewSliceDialog();
+    jpost.updateDialogTable();
+}
+
+jpost.openNewSliceDialogWithParameters = function() {
+    $( '#slice_dialog_filter_form' ).html( '' );
+
+    var parameters = $( '#filter_form' ).serializeArray();
+    var values = {};
+    parameters.forEach(
+        function( parameter ) {
+            values[ parameter.name ] = parameter.value;
+        }
+    );
+
+    for( var i = 0; i < jpost.formCount; i++ ) {
+        var id = 'filter' + i;
+        if( id in values ) {
+            var item = values[ id ];
+            var id = 'form_selection' + i + '_value';
+            var options = $( '#' + id + ' option' );
+
+            var count = jpost.dialogFormCount;
+            jpost.addFormInDialog();
+
+            $( 'slice_dialog_form_selection' + count ).val( item );
+            jpost.updateFilterFormInDialog( count );
+
+            id = 'slice_dialog_form_selection' + count + '_value';
+            var array = [];
+
+            options.each(
+                function( index, element ) {
+                    if( element.selected ) {
+                        var option = new Option( element.innerHTML, element.value, true, true );
+                        array.push( element.value );
+                        $( '#' + id ).append( option ).trigger( 'change' );
+                    }
+                }
+            );
+                
+            $( '#' + id ).trigger( 
+                {
+                    type: 'select2:select',
+                    params: {
+                        data: array
+                    }
+                }
+            );
+        }
+    }
+
+    $( '#slice_keyword_text' ).val( $( '#global_dataset_text' ).val() );
+
+    jpost.openNewSliceDialog();
+    jpost.updateDialogTable();
 }
 
 // open new slice dialog

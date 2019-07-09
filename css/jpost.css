@@ -419,6 +419,7 @@ input[type="text"] {
 }
 
 .pie_chart_stanza {
-  margin: 0 10;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
 }
 

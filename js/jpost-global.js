@@ -180,13 +180,6 @@ jpost.updateFilterForm = function( id ) {
     $( '#form_selection' + id + '_value' ).css( 'display', 'none' );
 
     var item = $( '#form_selection' + id ).val();
-    var orgItem = item;
-    if( item === 'sample_type' ) {
-        item = 'sampleType';
-    }
-    if( item === 'cell_line' ) {
-        item = 'cellLine';
-    }
 
     $( '#form_selection' + id + '_value' ).val( null ).trigger( 'change' );
     $( '#form_selection' + id + '_value' ).select2(
@@ -195,16 +188,17 @@ jpost.updateFilterForm = function( id ) {
                 url: 'preset_list.php',
                 type: 'GET',
                 data: function( params ) {
-                    return { item: item };
+                    var parameters = jpost.getFilterParameters();
+                    parameters.item = item;
+                    return parameters;
                 },
                 processResults: function( result, params ) {
                     var array = result.map(
                         function( object ) {
-                            return { id: object.object, text: object.label };
+                            return { id: object.id, text: object.label };
                         }
                     );
                     return { results: array };
-
                 }
             },
             width: '100%',

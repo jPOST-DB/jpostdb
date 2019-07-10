@@ -526,12 +526,14 @@ jpost.updateFilterFormInDialog = function( id ) {
                 url: 'preset_list.php',
                 type: 'GET',
                 data: function( params ) {
-                    return { item: item };
+                    var parameters = jpost.getDialogFilterParameters();
+                    parameters.item = item;
+                    return parameters;
                 },
                 processResults: function( result, params ) {
                     var array = result.map(
                         function( object ) {
-                            return { id: object.object, text: object.label };
+                            return { id: object.id, text: object.label };
                         }
                     );
                     return { results: array };

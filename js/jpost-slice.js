@@ -326,7 +326,7 @@ jpost.openNewSliceDialogWithParameters = function() {
 // open new slice dialog
 jpost.openNewSliceDialog = function() {
     jpost.slice = null;
-    $( '#dialog_slice_name' ).val( '' );
+    $( '#dialog_slice_name' ).val( 'Slice' + ( jpost.idCount + 1 ) );
     $( '#dialog_slice_description' ).val( '' );
     jpost.updateDialogTable();
     $( '#slice_dialog' ).dialog(
@@ -783,8 +783,8 @@ jpost.getSliceProteinColumns = function() {
             title: 'Protein Name',
             field: 'full_name',
             format: function( protein ) {
-                var url = "javascript:jpost.openGlobalProtein( '" + protein.accession + "' )";
-                var tag = '<a href="' + url + '">' + protein.full_name + '</a>';
+                var url = 'protein.php?id=' + protein.accession;
+                var tag = '<a href="' + url + '" target="_blank">' + protein.full_name + '</a>';
                 return tag;
             },
             width: 350

@@ -89,8 +89,9 @@ jpost.updateTabs = function() {
             }
         }
     );
-    $( '#slice_tab_field' ).append( '<a href="javascript:jpost.openNewSliceDialogWithInit()" class="tab_link title_link tab_link_short"><div>+</div></a>' );
+    $( '#slice_tab_field' ).append( '<a href="javascript:jpost.openNewSliceDialogWithInit()" class="tab_link title_link tab_link_short"><div><div style="padding-top: 10px;"><span class="fa fa-plus"></span></div></div></a>' );
     $( '#slice_tab_field' ).append( '<button id="compare_button">Compare</button>' );
+    $( '#slice_tab_field' ).append( '<div style="clear: both;"></div>' );
     $( '#compare_button' ).click( jpost.onCompareButton );
 }
 
@@ -120,7 +121,6 @@ jpost.addSliceContens = function( slice ) {
     $( '#' + id ).append( tag );
 
     $( '#' + mainId ).append( '<h2 style="float: left;">' + slice.name  + '</h2>' );
-    $( '#' + mainId ).append( '<p>' + slice.description  + '</p>' );
 
     var buttonId = id + '_buttons';
     tag = '<div><div id="' + buttonId + '" style="float: right;></div><div style="clear: both;"></div></div>';
@@ -151,6 +151,7 @@ jpost.addSliceContens = function( slice ) {
         }
     );   
     $( '#' + mainId ).append( '<div style="clear: both;"></div>' );
+    $( '#' + mainId ).append( '<p>' + slice.description  + '</p>' );
 
     $( '#' + mainId ).append( '<h3>Chromosome Info.</h3>' );
     $( '#' + mainId ).append( '<div id="' + id + '_chromosome"></div>' );

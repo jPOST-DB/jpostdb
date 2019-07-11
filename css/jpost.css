@@ -73,7 +73,9 @@ input[type="text"] {
 }
 
 #compare_button {
-  margin: 10px;
+  margin: 0 10px;
+  display: block;
+  float: left;
 }
 
 #slice_dialog {
@@ -88,6 +90,12 @@ input[type="text"] {
 #filter_chart_wrapper {
   width: 100%;
   overflow-x: auto;
+}
+
+#slice_tab_field {
+  margin: 0;
+  padding: 0;
+  border-bottom: solid 2px #007fb1;
 }
 
 .component {
@@ -249,21 +257,22 @@ input[type="text"] {
   float: left;
   width: 150px;
   height: 50px;
-  border: none;
+  border-radius: 4px 4px 0 0;
+  background: #ccc;
+  color: #fff !important;
   font-size: 14px;
   text-decoration: none;
-  color: #000;
-  background-color: #eee;
-  padding-top: 8px;
   cursor: pointer;
+  margin: 0;
 }
 
 .tab_link_short {
-    width: 75px !important;
+  width: 75px !important;
 }
 
 .tab_link:hover {
-  background-color: #ddd;
+  background: #007fb1;
+  color: #fff !important;
   text-decoration: none;
 }
 
@@ -276,8 +285,8 @@ input[type="text"] {
 }
 
 .active_tab_link {
-  background-color: white !important;
-  font-weight: bold;
+  background: #007fb1;
+  color: #fff !important;
 }
 
 .form_line, .slice_dialog_form_line {
@@ -286,8 +295,6 @@ input[type="text"] {
   display: -webkit-flex;
   display: flex;  
 }
-
-
 
 .filter_form_line {
   vertical-align: middle;

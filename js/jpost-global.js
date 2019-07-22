@@ -90,13 +90,7 @@ jpost.addFilterChart = function( id ) {
     var tag = '<div id="' + stanzaId + '" class="pie_chart_stanza '
             + clazz + '"></div>';
     $( '#filter_chart' ).append( tag );
-
-    setTimeout(
-        function() {
-            jpost.loadPieChart( stanzaId, type );
-        },
-        1000
-    );
+    jpost.loadPieChart( stanzaId, type );
 }
 
 // load pie chart
@@ -225,8 +219,16 @@ jpost.updateFilterForm = function( id ) {
     $( '#' + stanzaId ).html( '' );
 
     var type = jpost.getPieChartTypeName( item );
-    jpost.loadPieChart( stanzaId, type );
     jpost.updateFilterSelections();
+
+
+    setTimeout(
+        function() {
+            jpost.loadPieChart( stanzaId, type );
+        },
+        1000
+    );
+
 }
 
 // update filter selections

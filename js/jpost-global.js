@@ -177,6 +177,7 @@ jpost.deleteForm = function( id ) {
 
 // update filter form
 jpost.updateFilterForm = function( id ) {
+    console.log( 'hogehogehogheogheoghoehoeg' );
     $( '#form_selection' + id + '_value' ).css( 'display', 'none' );
 
     var item = $( '#form_selection' + id ).val();
@@ -212,9 +213,8 @@ jpost.updateFilterForm = function( id ) {
     var stanzaId = 'filter_chart' + id;
     $( '#' + stanzaId ).html( '' );
 
-    var type = jpost.getPieChartTypeName( orgItem );
+    var type = jpost.getPieChartTypeName( item );
     jpost.loadPieChart( stanzaId, type );
-
     jpost.updateFilterSelections();
 }
 

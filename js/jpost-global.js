@@ -91,7 +91,12 @@ jpost.addFilterChart = function( id ) {
             + clazz + '"></div>';
     $( '#filter_chart' ).append( tag );
 
-    jpost.loadPieChart( stanzaId, type );
+    setTimeout(
+        function() {
+            jpost.loadPieChart( stanzaId, type );
+        },
+        1000
+    );
 }
 
 // load pie chart

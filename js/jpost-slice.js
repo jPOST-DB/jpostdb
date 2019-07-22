@@ -12,10 +12,54 @@ jpost.getSelectedSlice = function() {
     return jpost.slice;
 }
 
+// add slice parameters
+jpost.addSliceParameters = function( slice ) {
+    var parameters = $( '#slice_dialog_filter_form' ).serializeArray();
+    var values = {};
+    parameters.forEach(
+        function( parameter ) {
+            values[ parameter.name ] = parameter.value;
+        }
+    );
+
+    var filters = {};
+
+    for( var i = 0; i < jpost.dialogFormCount; i++ ) {
+        var id = 'filter' + i;
+        if( id in values ) {
+            var item = values[ id ];
+            var array = [];
+
+            var id = 'slice_dialog_form_selection' + i + '_value';
+            var options = $( '#' + id + ' option' );
+
+            options.each(
+                function( index, element ) {
+                    if( element.selected ) {
+                        array.push( { id: element.value, text: element.innerHTML } );
+                    }
+                }
+            );
+
+            if( array.length > 0 ) {
+                filters[ item ] = array;
+            }
+        }
+    }
+
+    var keyword = $( '#slice_keyword_text' ).val();
+    filters[ 'keyword' ] = keyword;
+
+    slice.filters = filters;
+
+
+}
+
 // add slice
 jpost.addSlice = function( slice ) {
     slice.id = jpost.idCount;
     jpost.idCount++;
+    jpost.addSliceParameters( slice );
     jpost.slices.push( slice );
 }
 
@@ -263,11 +307,47 @@ jpost.findSlice = function( id ) {
     return dataset;
 }
 
-jpost.openNewSliceDialogWithInit = function() {
+jpost.openNewSliceDialogWithInit = function() {    
     $( '#slice_dialog_filter_form' ).html( '' );
     $( '#slice_keyword_text' ).val( '' );
     jpost.openNewSliceDialog();
     jpost.updateDialogTable();
+}
+
+jpost.setSliceParameters = function( slice ) {
+    for( key in slice.filters ) {
+        if( key === 'keyword' ) {
+            $( '#slice_keyword_text' ).val( slice.filters[ key ] );
+        }
+        else {            
+            var count = jpost.dialogFormCount;
+            jpost.addFormInDialog();
+            $( '#slice_dialog_form_selection' + count ).val( key );
+            jpost.updateFilterFormInDialog( count );
+
+            var array = slice.filters[ key ];
+            var values = [];
+
+            id = 'slice_dialog_form_selection' + count + '_value';
+            
+            array.forEach(
+                function( element ) {
+                    var option = new Option( element.text, element.id, true, true );
+                    values.push( element.id )
+                    $( '#' + id ).append( option ).trigger( 'change' );
+                }
+            );
+
+            $( '#' + id ).trigger( 
+                {
+                    type: 'select2:select',
+                    params: {
+                        data: values
+                    }
+                }
+            );
+        }
+    }
 }
 
 jpost.openNewSliceDialogWithParameters = function() {
@@ -291,7 +371,7 @@ jpost.openNewSliceDialogWithParameters = function() {
             var count = jpost.dialogFormCount;
             jpost.addFormInDialog();
 
-            $( 'slice_dialog_form_selection' + count ).val( item );
+            $( '#slice_dialog_form_selection' + count ).val( item );
             jpost.updateFilterFormInDialog( count );
 
             id = 'slice_dialog_form_selection' + count + '_value';
@@ -982,7 +1062,11 @@ jpost.downloadSlice = function( slice ) {
 }
 
 jpost.editSlice = function( slice ) {
+    $( '#slice_dialog_filter_form' ).html( '' );
+    $( '#slice_keyword_text' ).val( '' );    
+    jpost.setSliceParameters( slice );
     jpost.updateDialogTable();
+
     $( '#slice_dialog' ).dialog(
         {
             modal: true,
@@ -1030,7 +1114,8 @@ jpost.editSlice = function( slice ) {
                                     jpost.slice.name = name;
                                     jpost.slice.description = description;
                                     jpost.slice.datasets = datasets;
-                                    jpost.selectSlice( jpost.slice.id );                                    
+                                    jpost.selectSlice( jpost.slice.id );     
+                                    jpost.addSliceParameters( slice );                               
                                     dialog.dialog( 'close' );
                                 }
                             }

@@ -67,11 +67,6 @@ input[type="text"] {
   padding: 20px;
 }
 
-#tab_buttons_line {
-  display: -webkit-flex;
-  display: flex;
-}
-
 #compare_button {
   margin: 0 10px;
   display: block;
@@ -382,6 +377,7 @@ input[type="text"] {
 
 .tab_pane {
   padding: 20px;
+  width: 1258px !important;
   border-radius: 0 0 3px 3px;
   border-top: none;
   border-bottom: solid 1px lightblue;

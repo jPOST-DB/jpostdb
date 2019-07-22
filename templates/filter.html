@@ -5,6 +5,10 @@
         <span id="filter_title_icon" class="fas fa-caret-up filter_title_icon"></span>
       </button>
       <div id="filter_body" class="filter_body">
+        <div style="width: 100%">
+          <button id="filter_reset_button">Reset</button>
+          <div style="clear: both;"></div>
+        </div>
         <form id="filter_form" class="filter_form">
         </form>
         <button id="form_add_button" style="width: 50px">+</button>
@@ -14,6 +18,7 @@
         </div>      
         <script>
           $( '#form_add_button' ).click( jpost.addForm );
+          $( '#filter_reset_button' ).click( jpost.resetFilters );
         </script>
       </div>    
     </div>

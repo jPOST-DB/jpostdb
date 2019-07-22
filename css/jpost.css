@@ -98,6 +98,12 @@ input[type="text"] {
   border-bottom: solid 2px #007fb1;
 }
 
+#filter_reset_button {
+  display: block;
+  margin-left: auto;
+  width: 100px;
+}
+
 .component {
   margin: 0 auto;
 }

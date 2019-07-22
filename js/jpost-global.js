@@ -113,6 +113,13 @@ jpost.loadPieChart = function( stanzaId, type ) {
                                 data[ name ] = value.join( ',' );
                             }
                         }
+                        name = name + '_s';
+                        if( name in filter ) {
+                            var value = filter[ name ];
+                            if( value !== null && value !== undefined && value.length !== 0 ) {
+                                data[ name ] = value.join( ',' );
+                            }
+                        }
                     }
                 );
                 return data;
@@ -177,7 +184,6 @@ jpost.deleteForm = function( id ) {
 
 // update filter form
 jpost.updateFilterForm = function( id ) {
-    console.log( 'hogehogehogheogheoghoehoeg' );
     $( '#form_selection' + id + '_value' ).css( 'display', 'none' );
 
     var item = $( '#form_selection' + id ).val();
@@ -244,6 +250,13 @@ jpost.updateFilterSelections = function() {
             $( '#form_selection' + id + ' option:selected' ).prop( 'disabled', false );
         }
     }
+}
+
+// reset filters
+jpost.resetFilters = function() {
+    $( '#filter_form' ).html( '' );
+    $( '#filter_chart' ).html( '' );
+    jpost.addForm();
 }
 
 // create dataset table

@@ -218,17 +218,11 @@ jpost.updateFilterForm = function( id ) {
     var stanzaId = 'filter_chart' + id;
     $( '#' + stanzaId ).html( '' );
 
+    jpost.filterChartIds[ stanzaId ] = type;
     var type = jpost.getPieChartTypeName( item );
     jpost.updateFilterSelections();
-
-
-    setTimeout(
-        function() {
-            jpost.loadPieChart( stanzaId, type );
-        },
-        1000
-    );
-
+    jpost.updateGlobalTables();
+//    jpost.loadPieChart( stanzaId, type );
 }
 
 // update filter selections

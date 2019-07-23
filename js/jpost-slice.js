@@ -687,6 +687,22 @@ jpost.getDialogFilterParameters = function() {
 
             if( name in names ) {
                 name = names[ name ];
+                if( name === 'species' ) {
+                    if( value.indexOf( 'TAX_' ) !== 0 ) {
+                        name = 'species_s';
+                        if( !( name in data ) ) {
+                            data[ name ] = [];
+                        }
+                    }
+                }
+                else if( name == 'disease' ) {
+                    if( value.indexOf( 'DOID_' ) !== 0 ) {
+                        name = 'disease_s';
+                        if( !( name in data ) ) {
+                            data[ name ] = [];
+                        }
+                    }
+                }
                 data[ name ].push( value );
             }
             else {
@@ -928,14 +944,6 @@ jpost.getSlicePeptideColumns = function() {
         {
             title: 'ID',
             field: 'peptide_id',
-/*            
-            format: function( peptide ) {
-                var id = peptide.peptide_id;
-                var url = "javascript:jpost.openGlobalPeptide( '" + id + "' )";
-                var tag = '<a href="' + url + '">' + id + '</a>';
-                return tag;
-            },
-*/            
             width: 250
         },
         {

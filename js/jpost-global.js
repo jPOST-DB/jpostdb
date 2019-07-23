@@ -93,34 +93,40 @@ jpost.addFilterChart = function( id ) {
     jpost.loadPieChart( stanzaId, type );
 }
 
+// set stanza parameters 
+jpost.setStanzaParameters = function( parameters ) {
+    var filter = jpost.getFilterParameters();
+    jpost.filters.forEach(
+        function( item ) {
+            var name = item.name;
+            if( name in filter ) {
+                var value = filter[ name ];
+                if( value !== null && value !== undefined && value.length !== 0 ) {
+                    parameters[ name ] = value.join( ',' );
+                }
+            }
+            name = name + '_s';
+            if( name in filter ) {
+                var value = filter[ name ];
+                if( value !== null && value !== undefined && value.length !== 0 ) {
+                    parameters[ name ] = value.join( ',' );
+                }
+            }
+       }
+   );
+}
+
+
 // load pie chart
 jpost.loadPieChart = function( stanzaId, type ) {
+    var innerId = stanzaId + '_inner';
     var stanzas = [
         {
             name: 'stat_pie_chart',
             id: stanzaId,
             data: function() {
-                var data = { type: type };
-
-                var filter = jpost.getFilterParameters();
-                jpost.filters.forEach(
-                    function( item ) {
-                        var name = item.name;
-                        if( name in filter ) {
-                            var value = filter[ name ];
-                            if( value !== null && value !== undefined && value.length !== 0 ) {
-                                data[ name ] = value.join( ',' );
-                            }
-                        }
-                        name = name + '_s';
-                        if( name in filter ) {
-                            var value = filter[ name ];
-                            if( value !== null && value !== undefined && value.length !== 0 ) {
-                                data[ name ] = value.join( ',' );
-                            }
-                        }
-                    }
-                );
+                var data = { type: type, id: innerId };
+                jpost.setStanzaParameters( data );
                 return data;
             }
         }
@@ -216,13 +222,11 @@ jpost.updateFilterForm = function( id ) {
     $( '#form_selection' + id + '_value' ).change( jpost.updateGlobalTables );
 
     var stanzaId = 'filter_chart' + id;
-    $( '#' + stanzaId ).html( '' );
 
-    jpost.filterChartIds[ stanzaId ] = type;
     var type = jpost.getPieChartTypeName( item );
+    jpost.filterChartIds[ stanzaId ] = type;
     jpost.updateFilterSelections();
     jpost.updateGlobalTables();
-//    jpost.loadPieChart( stanzaId, type );
 }
 
 // update filter selections
@@ -509,8 +513,27 @@ jpost.updateGlobalTables = function() {
 
 // update pie charts
 jpost.updatePieCharts = function() {
+    var parameters = {};
+    jpost.setStanzaParameters( parameters );
     for( id in jpost.filterChartIds ) {
-        jpost.loadPieChart( id, jpost.filterChartIds[ id ] );
+        var type = jpost.filterChartIds[ id ];
+        var innerId = id + '_inner';
+        jpost.filters.forEach(
+            function( filter ) {
+                [ filter.name, filter.name + '_s' ].forEach( 
+                    function( item ) {
+                        if( item in parameters ) {
+                            $( '#' + innerId ).attr( item, parameters[ item ] );    
+                        }
+                        else {
+                            $( '#' + innerId ).removeAttr( item );
+                        }
+                    }
+                );
+            }
+        );
+        $( '#' + innerId ).attr( 'type', type );
+//        jpost.loadPieChart( id, jpost.filterChartIds[ id ] );
     }
 }
 
@@ -677,7 +700,7 @@ jpost.createProteinPsmTable = function( id, protein ) {
             },
             countClass: 'psm_table_tab_button',
             countUpdate: function( count ) {
-                return 'Psm (' + count + ')';
+                return 'PSM (' + count + ')';
             }
         }
     );

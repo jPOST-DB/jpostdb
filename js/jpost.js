@@ -21,7 +21,6 @@ jpost.openTab = function( name ) {
 jpost.loadStanzas = function( stanzas ) {
     stanzas.forEach(
         function( stanza ) {
-//            var url = 'https://globe.jpostdb.org/stanza?stanza=' + stanza.name;
             var url = 'stanza.php?stanza=' + stanza.name;;
             var params = stanza.data();
             var width = 250;
@@ -36,8 +35,6 @@ jpost.loadStanzas = function( stanzas ) {
                 var string = key + '=' + encodeURI( params[ key ] );
                 url += '&' + string;
             }
-//            var tag = '<iframe src="' + url + '" width="' + width + '" height="' + height + '" style="border: none;" scrolling="no" frameborder="no"></iframe>';
-//            $( '#' + stanza.id ).html( tag );
             $( '#' + stanza.id ).load( url );            
 
         }

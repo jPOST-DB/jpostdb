@@ -586,7 +586,8 @@ jpost.createDatasetProteinTable = function( id, dataset ) {
             countUpdate: function( count ) {
                 return 'Protein (' + count + ')';
             }
-        }
+        },
+        true
     );
 }
 
@@ -604,7 +605,8 @@ jpost.createDatasetPeptideTable = function( id, dataset ) {
             countUpdate: function( count ) {
                 return 'Peptide (' + count + ')';
             }
-        }
+        },
+        true
     );
 }
 
@@ -623,7 +625,8 @@ jpost.createProteinPeptideTable = function( id, protein ) {
             countUpdate: function( count ) {
                 return 'Peptide (' + count + ')';
             }
-        }
+        },
+        true
     );
 }
 
@@ -702,7 +705,8 @@ jpost.createProteinPsmTable = function( id, protein ) {
             countUpdate: function( count ) {
                 return 'PSM (' + count + ')';
             }
-        }
+        },
+        true
     );
 }
 

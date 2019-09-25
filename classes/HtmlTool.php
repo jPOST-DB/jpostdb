@@ -40,6 +40,17 @@ class HtmlTool {
         $id = $_REQUEST[ 'id' ];
         return $id;
     }
+
+    /**
+     * gets the parameter
+     */
+    public static function getParameter( $key ) {
+        $value = null;
+        if( array_key_exists( $key, $_REQUEST ) ) {
+            $value = $_REQUEST[ $key ];
+        }
+        return $value;
+    }
 }
 
 ?>

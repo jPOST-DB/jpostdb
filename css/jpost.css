@@ -297,6 +297,14 @@ input[type="text"] {
   display: flex;  
 }
 
+.slice_header {
+  background: #007fb1;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  padding: 5px;
+}
+
 .filter_form_line {
   vertical-align: middle;
 }

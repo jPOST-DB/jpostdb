@@ -1,4 +1,12 @@
 <div>
+  <script>
+    jpost.slice = jpost.findSliceByName( '{{ slice }}' );
+    console.log( jpost.slice );
+  </script>
+  {% if slice %}
+    <div class="slice_header">Slice: {{ slice }}</div>
+  {% endif %}
+
   <h2>Protein: {{ id }}</h2>
   <div id="table_protein"></div>
       
@@ -46,34 +54,34 @@
               {
                   name: 'table_protein',
                   id: 'table_protein',
-                  width: 900,
-                  height: 700,
                   data: function() {
-                      return {
-                          uniprot: id
-                      };
+                      var data = { uniprot: id };
+                      if( jpost.slice !== null ) {
+                          data[ 'dataset' ] = jpost.slice.datasets.join( ' ' );
+                      }
+                      return data;
                   }
               },
               {
                   name: 'protein_browser',
                   id: 'protein_browser',
-                  width: 900,
-                  height: 400,
                   data: function() {
-                      return {
-                          uniprot: id
-                      };
+                      var data = { uniprot: id };
+                      if( jpost.slice !== null ) {
+                          data[ 'dataset' ] = jpost.slice.datasets.join( ' ' );
+                      }
+                      return data;
                   }
               },
               {
                   name: 'proteoform_browser',
                   id: 'proteoform_browser',
-                  width: 900,
-                  height: 500,
                   data: function() {
-                      return {
-                          uniprot: id
-                      };
+                      var data = { uniprot: id };
+                      if( jpost.slice !== null ) {
+                          data[ 'dataset' ] = jpost.slice.datasets.join( ' ' );
+                      }
+                      return data;
                   }
               }
           ];   

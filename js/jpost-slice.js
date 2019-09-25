@@ -310,6 +310,19 @@ jpost.findSlice = function( id ) {
     return dataset;
 }
 
+// get slice
+jpost.findSliceByName = function( name ) {
+    var slice = null;
+    jpost.slices.forEach(
+        function( tmp ) {
+            if( tmp.name === name ) {
+                slice = tmp;
+            }
+        }
+    );
+    return slice;
+}
+
 jpost.openNewSliceDialogWithInit = function() {    
     $( '#slice_dialog_filter_form' ).html( '' );
     $( '#slice_keyword_text' ).val( '' );
@@ -419,11 +432,17 @@ jpost.openNewSliceDialog = function() {
             title: 'New Slice',
             width: '800px',
             buttons: {
-                Add: function() {
+                Create: function() {
                     var name = $( '#dialog_slice_name' ).val();
                     if( name == null || name == '' ) {
                         alert( "Slice Name is empty." );
                         return;
+                    }
+                    for( var i = 0; i < jpost.slices.length; i++ ) {
+                        if( jpost.slices[ i ].name === name ) {
+                            alert( 'Name [' + name + '] is already exists.' );
+                            return;
+                        }
                     }
                     var description = $( '#dialog_slice_description' ).val();
                     var datasets = jpost.getCheckedDatasets();
@@ -668,7 +687,7 @@ jpost.createDialogDatasetTable = function( id ) {
         id,
         {
             url: 'dataset_table.php',
-            columns: jpost.getDialogDatasetColumns(),
+            columns: jpost.dialogDatasetColumns,
             parameters: function() {
                 var params = jpost.getDialogFilterParameters();
                 return params;
@@ -718,72 +737,6 @@ jpost.getDialogFilterParameters = function() {
     return data;
 }
 
-// dataset columns
-jpost.getDialogDatasetColumns = function() {
-    var checkHeader = '<input type="checkbox" id="dialog_dataset_all_check">'
-    var columns = [
-        {
-            title: checkHeader,
-            align: 'center',
-            width: 50,
-            format: function( dataset ) {
-                var tag = '<input type="checkbox" name="dialog_slice[]" value="' + dataset.dataset_id + '" ';
-                tag = tag + 'class="dialog_dataset_check"';
-                var slice = jpost.getSelectedSlice();
-                if( slice != null ) {
-                    var checked = false;
-                    slice.datasets.forEach(
-                        function( element ) {
-                            if( element == dataset.dataset_id ) {
-                                checked = true;
-                            }
-                        }
-                    );
-                    if( checked ) {
-                        tag = tag + ' checked';
-                    }
-                    tag = tag + '>';
-                }
-                return tag;
-            },
-            sortable: false
-        },
-        {
-            title: 'Dataset ID',
-            field: 'dataset_id',
-            width: 200
-        },
-        {
-            title: 'Project ID',
-            field: 'project_id',
-            width: 200
-        },
-        {
-            title: 'Project Title',
-            field: 'project_title',
-            width: 350
-        },
-        {
-            title: 'Project Date',
-            field: 'project_date',
-            width: 180
-        },
-        {
-            title: '#proteins',
-            field: 'protein_count',
-            width: 120,
-            align: 'right'
-        },
-        {
-            title: '#spectra',
-            field: 'spectrum_count',
-            width: 120,
-            align: 'right'
-        }
-    ];
-    return columns;
-}
-
 // get checked datasets
  jpost.getCheckedDatasets = function() {
     var array = [];
@@ -802,7 +755,7 @@ jpost.createSliceDatasetTable = function( slice ) {
         id,
         {
             url: 'dataset_table.php',
-            columns: jpost.getSliceDatasetColumns(),
+            columns: jpost.sliceDatasetColumns,
             parameters: function() {
                 var params = {
                     'datasets': slice.datasets
@@ -818,46 +771,6 @@ jpost.createSliceDatasetTable = function( slice ) {
     );
 }
 
-// dataset columns
-jpost.getSliceDatasetColumns = function() {
-    var checkHeader = '<input type="checkbox" id="dataset_all_check">'
-    var columns = [
-        {
-            title: 'Dataset ID',
-            field: 'dataset_id',
-            width: 200
-        },
-        {
-            title: 'Project ID',
-            field: 'project_id',
-            width: 200
-        },
-        {
-            title: 'Project Title',
-            field: 'project_title',
-            width: 350
-        },
-        {
-            title: 'Project Date',
-            field: 'project_date',
-            width: 180
-        },
-        {
-            title: '#proteins',
-            field: 'protein_count',
-            width: 120,
-            align: 'right'
-        },
-        {
-            title: '#spectra',
-            field: 'spectrum_count',
-            width: 120,
-            align: 'right'
-        }
-    ];
-    return columns;
-}
-
 // create protein table
 jpost.createSliceProteinTable = function( slice ) {
     var id = 'slice_contents_' + slice.id + '_protein_tab_pane';
@@ -865,7 +778,7 @@ jpost.createSliceProteinTable = function( slice ) {
         id,
         {
             url: 'protein_table.php',
-            columns: jpost.getSliceProteinColumns(),
+            columns: jpost.sliceProteinColumns,
             parameters: function() {
                 return { datasets: slice.datasets };
             },
@@ -878,50 +791,6 @@ jpost.createSliceProteinTable = function( slice ) {
     );
 }
 
-// protein columns
-jpost.getSliceProteinColumns = function() {
-    var columns = [
-        {
-            title: 'Protein Name',
-            field: 'full_name',
-            format: function( protein ) {
-                var url = 'protein.php?id=' + protein.accession;
-                var tag = '<a href="' + url + '" target="_blank">' + protein.full_name + '</a>';
-                return tag;
-            },
-            width: 350
-        },
-        {
-            title: 'Accession',
-            field: 'accession',
-            format: function( protein ) {
-                var accession = protein.accession;
-                var url = 'https://www.uniprot.org/uniprot/' + accession;
-                var tag = '<a href="' + url + '">' + accession + '</a>';
-                return tag;
-            },
-            width: 180
-        },
-        {
-            title: 'ID',
-            field: 'mnemonic',
-            width: 180
-        },
-        {
-            title: 'Length',
-            field: 'length',
-            width: 100,
-            align: 'right'
-        },
-        {
-            title: 'Sequence',
-            field: 'sequence',
-            width: 350,
-        }
-    ];
-    return columns;
-}
-
 // create slice peptide table
 jpost.createSlicePeptideTable = function( slice ) {
     var id = 'slice_contents_' + slice.id + '_peptide_tab_pane';
@@ -929,7 +798,7 @@ jpost.createSlicePeptideTable = function( slice ) {
         id,
         {
             url: 'peptide_table.php',
-            columns: jpost.getSlicePeptideColumns(),
+            columns: jpost.slicePeptideColumns,
             parameters: function() {
                 return { datasets: slice.datasets };
             },
@@ -939,59 +808,6 @@ jpost.createSlicePeptideTable = function( slice ) {
             }
         }
     );
-}
-
-// get peptide columns
-jpost.getSlicePeptideColumns = function() {
-    var columns = [
-        {
-            title: 'ID',
-            field: 'peptide_id',
-            width: 250
-        },
-        {
-            title: 'Dataset ID',
-            field: 'dataset_id',
-            format: function( peptide ) {
-                var url = "javascript:jpost.openGlobalDataset( '" + peptide.dataset_id + "' )";
-                var tag = '<a href="' + url + '">' + peptide.dataset_id + '</a>';
-                return tag;
-            },
-            width: 200
-        },
-        {
-            title: 'Protein Name',
-            field: 'full_name',
-            format: function( peptide ) {
-                var url = "javascript:jpost.openGlobalProtein( '" + peptide.accession + "' )";
-                var tag = '<a href="' + url + '">' + peptide.full_name + '</a>';
-                return tag;
-            },
-            width: 350
-        },
-        {
-            title: 'Accession',
-            field: 'accession',
-            format: function( peptide ) {
-                var accession = peptide.accession;
-                var url = 'https://www.uniprot.org/uniprot/' + accession;
-                var tag = '<a href="' + url + '">' + accession + '</a>';
-                return tag;
-            },
-            width: 180
-        },
-        {
-            title: 'Protein ID',
-            field: 'mnemonic',
-            width: 180
-        },
-        {
-            title: 'Sequence',
-            field: 'sequence',
-            width: 350,
-        }
-    ];
-    return columns;
 }
 
 // get checked slices
@@ -1074,7 +890,8 @@ jpost.downloadSlice = function( slice ) {
 
 jpost.editSlice = function( slice ) {
     $( '#slice_dialog_filter_form' ).html( '' );
-    $( '#slice_keyword_text' ).val( '' );    
+    $( '#slice_keyword_text' ).val( '' );
+    $( '#dialog_slice_name' ).val( slice.name );
     jpost.setSliceParameters( slice );
     jpost.updateDialogTable();
 

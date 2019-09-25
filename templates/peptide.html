@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<html>
+  {{ include( "head.html" ) }}
+  <body>
+    <header class="header">
+      <div class="header_inner">
+        <div class="header_left">
+          <a href="https://jpostdb.org/" class="header_logo">
+            <img src="images/logo.svg" width="100" height="100" />
+            <h1 class="header_title">DATABASE</h1>
+          </a>
+        </div>
+        <div class="header_right">
+          <nav class="header_nav">
+            <ul class="header_nav_main">
+              <li><a href="javascript:jpost.openTab( 'search' )" class="top_menu"><span class="fa fa-search"></span><br>Search</a></li>
+              <li><a href="javascript:jpost.openTab( 'slice' )" class="top_menu"><span class="fa fa-chart-area"></span><br>Slice</a></li>
+              <li><a href="javascript:jpost.openTab( 'compare' )" class="top_menu"><span class="fa fa-copy"></span><br>Compare</a></li>
+              <li><a href="javascript:jpost.openTab( 'help' )" class="top_menu"><span class="fa fa-question"></span><br>Help</a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </header>
+    <article class="main">
+      <div class="component main">
+        <div id="search_panel" class="main_tab_field">
+          <div id="main_search_panel">
+            {{ include( "search.html" ) }}
+          </div>
+        </div>
+        <div id="slice_panel" class="main_tab_field">
+          {{ include( "slice.html" ) }}
+        </div>
+        <div id="compare_panel" class="main_tab_field">
+          {{ include( "compare.html" ) }}
+        </div>
+        <div id="help_panel" class="main_tab_field">
+          {{ include( "help.html" ) }}
+        </div>
+        <div id="etc_panel" class="main_tab_field">
+         {{ include( "peptide_detail.html") }}
+        </div>
+      </div>
+    </article>
+    <script>
+      jpost.openTab( 'etc' );
+    </script>
+    {{ include( "footer.html" ) }}
+    {{ include( "dialogs.html" ) }}
+  </body>
+</html>

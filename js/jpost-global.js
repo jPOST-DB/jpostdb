@@ -567,3 +567,52 @@ jpost.createProteinPsmTable = function( id, protein ) {
         true
     );
 }
+
+// create peptide psm table
+jpost.createPeptidePsmTable = function( id, peptide, sequence, tax ) {
+    if( sequence != null ) {
+        jpost.createPsmTableFromSequence( id, sequence, tax );
+    }
+    else {
+        $.ajax(
+            {
+                url: 'peptide_info.php',
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    id: peptide
+                }
+            }
+        ).then(
+            function( result ) {
+                jpost.createPsmTableFromSequence( id, result.sequence, null );
+            }
+        );
+    }
+}
+
+// create PSM table from sequnce
+jpost.createPsmTableFromSequence = function( id, sequence, tax ) {
+    table.createTable(
+        id,
+        {
+            url: 'psm_table.php',
+            columns: jpost.globalPsmColumns,
+            parameters: function() {
+                var data = { peptides: sequence };
+                if( tax != null ) {
+                    data[ 'tax' ] = tax;
+                }
+                if( jpost.slice != null ) {
+                    data[ 'datasets' ] = jpost.slice.datasets;
+                }
+                return data;                
+            },
+            countClass: 'psm_table_tab_button',
+            countUpdate: function( count ) {
+                return 'PSM (' + count + ')';
+            }
+        },
+        true
+    );
+}

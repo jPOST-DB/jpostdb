@@ -1,0 +1,73 @@
+<div>
+  <script>
+    jpost.slice = jpost.findSliceByName( '{{ slice }}' );
+    var id = null;
+    var peptide = null;
+    var tax = null;    
+  </script>
+  {% if slice %}
+    <div class="slice_header">Slice: {{ slice }}</div>
+  {% endif %}
+
+  {% if id %}
+    <h2>Peptide: {{ id }}</h2>
+    <script>
+        id = '{{ id }}';
+    </script>
+  {% else %}
+    <h2>Peptide: tax={{ tax }}, sequence={{ peptide }}</h2>
+    <script>
+        tax = '{{ tax }}';
+        peptide = '{{ peptide }}';
+    </script>
+  {% endif %}
+
+  <div id="table_peptide"></div>
+      
+  <div id="information_pane">
+    <div class="tab_buttons_line">
+      <button id="peptide_psm_tab_button" class="peptide_tab_button tab_button tab_active psm_table_tab_button">PSM</button>
+      <script>
+        $( '#peptide_psm_tab_button' ).click( 
+            function() {
+                jpost.changeTabPanel( 'peptide_psm', 'peptide' );
+            }
+        );
+      </script>
+      <button class="fill_blank"></button>
+      <div style="clear: both;"></div>
+    </div>
+    <div id="peptide_psm_tab_pane" class="tab_pane peptide_tab_pane">
+      <form id="psm_form" onsubmit="return false;">
+        <div id="peptide_psms" class="information_table"></div>
+      </form>
+    </div>
+  </div>  
+</div>
+      
+      <script>
+          var stanzas = [
+              {
+                  name: 'table_peptide',
+                  id: 'table_peptide',
+                  data: function() {
+                      var data = {};
+                      if( id != null ) {
+                          data[ 'peptide' ] = id;
+                      }
+                      else {
+                          data[ 'peptide' ] = peptide;
+                          data[ 'tax' ] = tax;
+                      }
+                      if( jpost.slice !== null ) {
+                          data[ 'dataset' ] = jpost.slice.datasets.join( ' ' );
+                      }
+                      console.log( data );
+                      return data;
+                  }
+              }
+          ];   
+          jpost.loadStanzas( stanzas );
+          jpost.createPeptidePsmTable( 'peptide_psms', id, peptide, tax );
+      </script>
+      

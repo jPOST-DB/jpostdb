@@ -6,6 +6,9 @@
       
     <h3>Protein Existence</h3>
     <div id="protein_evidence"></div>
+
+    <h3>Gene Ontology</h3>
+    <div id="go_count"></div>
       
     <h3>KEGG Pathway Mapping</h3>
     <div id="kegg_mapping_form"></div>
@@ -77,6 +80,15 @@
                   id: 'protein_evidence',
                   width: 900,
                   height: 500,                  
+                  data:  function() {
+                      return { dataset: id }
+                  }
+              },
+              {
+                  name: 'go_count',
+                  id: 'go_count',
+                  width: 900,
+                  height: 500,
                   data:  function() {
                       return { dataset: id }
                   }

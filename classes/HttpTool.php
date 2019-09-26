@@ -68,6 +68,11 @@
             if( $array != null ) {
                 $parameters[ 'proteins' ] = join( ',', $array );
             }
+
+            $peptides = self::getParameter( 'peptides' );
+            if( $peptides != null ) {
+                $parameters[ 'peptides' ] = $peptides;
+            }
         }
 
         /**
@@ -109,6 +114,6 @@
                 'total' => $total
             );
             return $result;        
-        }      
+        }
     }
 ?>

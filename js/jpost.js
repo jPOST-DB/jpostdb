@@ -19,24 +19,19 @@ jpost.openTab = function( name ) {
 
 // load stanza
 jpost.loadStanzas = function( stanzas ) {
-    stanzas.forEach(
+   stanzas.forEach(
         function( stanza ) {
-            var url = 'stanza.php?stanza=' + stanza.name;;
+            var tagName = 'togostanza-' + stanza.name;
+            var tag = '<' + tagName;
             var params = stanza.data();
-            var width = 250;
-            var height = 250;
-            if( 'width' in stanza ) {
-                width = stanza.width;
+            
+            for( var key in params ) {
+                var value = params[ key ];
+                tag = tag + ' ' + key + '="' + value + '"';
             }
-            if( 'height' in stanza ) {
-                height = stanza.height;
-            }
-            for( key in params ) {
-                var string = key + '=' + encodeURI( params[ key ] );
-                url += '&' + string;
-            }
-            $( '#' + stanza.id ).load( url );            
-
+            tag = tag + '></' + tagName + '>';
+            console.log( tag );
+            $( '#' + stanza.id ).html( tag );
         }
     );
 }

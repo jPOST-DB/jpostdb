@@ -1,10 +1,10 @@
 // filter
 jpost.filters = [
     { title: 'Species',      name: 'species' },
-    { title: 'Sample type',  name: 'sample_type' },
-    { title: 'Cell line',    name: 'cell_line' },
     { title: 'Organ',        name: 'organ' },
     { title: 'Disease',      name: 'disease' },
+    { title: 'Sample type',  name: 'sample_type' },
+    { title: 'Cell line',    name: 'cell_line' },
     { title: 'Modification', name: 'modification' },
     { title: 'Instrument',   name: 'instrument' }
 ];
@@ -35,21 +35,30 @@ jpost.toggleFilterForm = function() {
 }
 
 // add form
-jpost.addForm = function() {
+jpost.addForm = function(num, count) {
     var id = jpost.formCount;
     jpost.formCount++;
 
     var tag = '<div id="filter_form_line' + id + '" class="form_line"></div>';
     $( '#filter_form' ).append( tag );
-
+    
     jpost.addFormSelection( id );
     jpost.addFormText( id );
     jpost.addFormDeleteButton( id );
     jpost.addFilterChart( id );
     jpost.updateFilterForm( id );
-
     if( jpost.getNextFormType() === null ) {
         $( '#form_add_button' ).prop( 'disabled', true );
+    }
+    if(num != undefined && num > 0){
+	if(count == undefined) count = 0;
+	let id = setInterval(function(){
+	    let shadowRoot = document.getElementsByTagName("togostanza-stat_pie_chart")[count].shadowRoot;
+	    if(shadowRoot && shadowRoot.childNodes[0] && shadowRoot.childNodes[0].getElementsByTagName("div")[0]){
+		clearInterval(id);
+		jpost.addForm(num - 1, count + 1);
+	    }
+	}, 100);
     }
 }
 
@@ -90,7 +99,7 @@ jpost.addFilterChart = function( id ) {
     var tag = '<div id="' + stanzaId + '" class="pie_chart_stanza '
             + clazz + '"></div>';
     $( '#filter_chart' ).append( tag );
-    jpost.loadPieChart( stanzaId, type );
+    jpost.loadPieChart( stanzaId, type, id );
 }
 
 // set stanza parameters 
@@ -118,7 +127,7 @@ jpost.setStanzaParameters = function( parameters ) {
 
 
 // load pie chart
-jpost.loadPieChart = function( stanzaId, type ) {
+jpost.loadPieChart = function( stanzaId, type, id ) {
     var innerId = stanzaId + '_inner';
     var stanzas = [
         {
@@ -131,7 +140,7 @@ jpost.loadPieChart = function( stanzaId, type ) {
             }
         }
     ];
-    jpost.filterChartIds[ stanzaId ] = type;    
+    jpost.filterChartIds[ stanzaId ] = type;
     jpost.loadStanzas( stanzas );
 }
 
@@ -226,7 +235,7 @@ jpost.updateFilterForm = function( id ) {
     var type = jpost.getPieChartTypeName( item );
     jpost.filterChartIds[ stanzaId ] = type;
     jpost.updateFilterSelections();
-    jpost.updateGlobalTables();
+    if(table.tables && table.tables['datasets'] && table.tables['proteins']) jpost.updateGlobalTables();
 }
 
 // update filter selections
@@ -306,7 +315,7 @@ jpost.getFilterParameters = function() {
                     }
                 }
                 else if( name == 'disease' ) {
-                    if( value.indexOf( 'DOID_' ) !== 0 ) {
+                    if( value.indexOf( 'DOID_' ) !== 0 && value.indexOf( 'JPO_' ) !== 0 ) {
                         name = 'disease_s';
                         if( !( name in data ) ) {
                             data[ name ] = [];
@@ -411,8 +420,13 @@ jpost.createGlobalProteinTable = function( id, dataset ) {
     );
 }
 
-// update global tables
+// update global tablesq
 jpost.updateGlobalTables = function() {
+    
+    // reset counts in tab button
+    $( '.dataset_table_tab_button' ).html( 'Dataset' );
+    $( '.protein_table_tab_button' ).html( 'Protein' );
+    
     table.setPageNumber( 'datasets', 1 );
     table.updateTable( 'datasets' );
 
@@ -426,8 +440,9 @@ jpost.updateGlobalTables = function() {
 jpost.updatePieCharts = function() {
     var parameters = {};
     jpost.setStanzaParameters( parameters );
-    for( id in jpost.filterChartIds ) {
-        var type = jpost.filterChartIds[ id ];
+  //  for( id in jpost.filterChartIds ) {
+     let updatePieChartStanzaParams = function(id){   
+     var type = jpost.filterChartIds[ id ];
         var innerId = id + '_inner';
         jpost.filters.forEach(
             function( filter ) {
@@ -444,8 +459,13 @@ jpost.updatePieCharts = function() {
             }
         );
         $( '#' + innerId ).attr( 'type', type );
+     };
+     for(id in jpost.filterChartIds ) {
+        let num = id.match(/(\d+)/)[1];
+        setTimeout( updatePieChartStanzaParams, num * 500, id);
+     }
 //        jpost.loadPieChart( id, jpost.filterChartIds[ id ] );
-    }
+//    }
 }
 
 jpost.setPieChartFilter = function() {
@@ -574,21 +594,31 @@ jpost.createPeptidePsmTable = function( id, peptide, sequence, tax ) {
         jpost.createPsmTableFromSequence( id, sequence, tax );
     }
     else {
-        $.ajax(
-            {
-                url: 'peptide_info.php',
-                type: 'GET',
-                dataType: 'json',
-                data: {
-                    id: peptide
-                }
-            }
-        ).then(
-            function( result ) {
-                jpost.createPsmTableFromSequence( id, result.sequence, null );
-            }
-        );
+	jpost.createPsmTableFromPeptideId( id, peptide );
     }
+}
+
+// create PSM table from pepID
+jpost.createPsmTableFromPeptideId = function( id, peptide ) {
+    table.createTable(
+        id,
+        {
+            url: 'psm_table.php',
+            columns: jpost.globalPsmColumns,
+            parameters: function() {
+                var data = { peptides: peptide };
+                if( jpost.slice != null ) {
+                    data[ 'datasets' ] = jpost.slice.datasets;
+                }
+                return data;                
+            },
+            countClass: 'psm_table_tab_button',
+            countUpdate: function( count ) {
+                return 'PSM (' + count + ')';
+            }
+        },
+        true
+    );
 }
 
 // create PSM table from sequnce

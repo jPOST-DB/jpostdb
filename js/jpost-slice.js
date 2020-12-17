@@ -125,7 +125,7 @@ jpost.updateTabs = function() {
             tab = tab + 'href="javascript:jpost.selectSlice( ' + slice.id + '  )"><div>' + slice.name
                 + '</div><div><input id="slice_checkbox' + slice.id + '" type="checkbox" class="slice_tab_check" name="slices[]" value="' + slice.id + '" /></div></a>';
             $( '#slice_tab_field' ).append( tab );
-            jpost.addSliceContens( slice );
+            jpost.addSliceContens( slice);
             $( '.slices' ).append( '<option value="' + slice.id + '">' + slice.name + '</option>' );
             $( '#slice_checkbox' + slice.id ).change( jpost.onCheckSlice )
             if( checkedSliceIds.indexOf( slice.id ) >= 0 ) {
@@ -151,7 +151,7 @@ jpost.onCheckSlice = function() {
 }
 
 // add slice contents
-jpost.addSliceContens = function( slice ) {
+jpost.addSliceContens = function( slice ) { 
     var id = 'slice_contents_' + slice.id;
     var tag = '<div id="' + id + '" class="slice_pane" style="display: none;"><div>';
     $( '#slice_information_pane' ).append( tag );
@@ -197,7 +197,7 @@ jpost.addSliceContens = function( slice ) {
     $( '#' + mainId ).append( '<div style="clear: both;"></div>' );
     $( '#' + mainId ).append( '<p>' + slice.description  + '</p>' );
 
-    $( '#' + mainId ).append( '<h3>Table</h3>' );
+    // $( '#' + mainId ).append( '<h3>Table</h3>' );
     $( '#' + mainId ).append( '<div id="' + id + '_table_slice"></div>' );
     $( '#' + mainId ).append( '<h3>Chromosome Info.</h3>' );
     $( '#' + mainId ).append( '<div id="' + id + '_chromosome"></div>' );
@@ -205,7 +205,8 @@ jpost.addSliceContens = function( slice ) {
     $( '#' + mainId ).append( '<div id="' + id + '_protein"></div>' );
     $( '#' + mainId ).append( '<h3>Pathway Mapping</h3>' );
     $( '#' + mainId ).append( '<div id="' + id + '_kegg"></div>' );
-    jpost.loadSliceStanzas( slice );
+    //jpost.loadSliceStanzas( slice );    
+    setTimeout(jpost.loadSliceStanzas, slice.id * 100, slice );
 
     $( '#' + mainId ).append( '<div id="' + id + '_tab_buttons" class="tab_buttons_line"></div>' );
     tag = '<button id="' + id + '_dataset_tab_button" class="' + id + '_tab_button tab_button tab_active dataset_tab_button">Dataset</button>';

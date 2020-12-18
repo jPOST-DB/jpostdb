@@ -197,6 +197,9 @@ jpost.addSliceContens = function( slice ) {
     $( '#' + mainId ).append( '<div style="clear: both;"></div>' );
     $( '#' + mainId ).append( '<p>' + slice.description  + '</p>' );
 
+    $( '#' + mainId ).append( '<h3>Slice Table</h3>')
+    $( '#' + mainId ).append( '<div id="' + id + '_slice_table"></div>' );
+
     // $( '#' + mainId ).append( '<h3>Table</h3>' );
     $( '#' + mainId ).append( '<div id="' + id + '_table_slice"></div>' );
     $( '#' + mainId ).append( '<h3>Chromosome Info.</h3>' );
@@ -241,6 +244,42 @@ jpost.addSliceContens = function( slice ) {
     jpost.createSliceDatasetTable( slice );
     jpost.createSliceProteinTable( slice );
     jpost.createSlicePeptideTable( slice );
+
+    jpost.addOptimized(slice);
+}
+
+jpost.addOptimized = function(slice) {
+    var id = 'slice_contents_' + slice.id;
+    var datasets = slice.datasets.join(' ');
+    var url = 'http://localhost:8080/proteins?datasets=' + encodeURI(datasets);
+
+    $.ajax(
+        {
+            url: 'slice_table.php',
+            type: 'GET',
+            data: {
+                datasets: datasets,
+                url: url
+            },
+            dataType: 'json'
+        }
+    ).then(
+        function(response) {
+            console.log(response);
+            var object = JSON.parse(response);
+            var divId = id + '_slice_table';
+            var table = '<table><tr><th>Dataset Count</th><td>' + object.dataset_count + '</td></tr>'
+                        + '<tr><th>Protein Count</th><td>' + object.protein_count + '</td></tr>'
+                        + '<tr><th>Peptide Count</th><td>' + object.peptide_count + '</td></tr>'
+                        + '<tr><th>Unique Peptide Count</th><td>' + object.uniq_pep_count + '</td></tr>'
+                        + '<tr><th>ID</th><td>' + object.id + '</td></tr>'
+                        + '<tr><th>Species</th><td>' + object.species + '</td></tr></table>';
+            $('#' + divId).append(table);
+        },
+        function(jqXHR, status, error) {
+            console.log('error!');
+        }
+    );
 }
 
 // load slice stanzas

@@ -5,17 +5,24 @@
         public static function postSparqlist( $url, $parameters ) {
             $data = self::post( $url, $parameters );
 
-            $keys = $data[ 'head' ][ 'vars' ];
-            $bindings = $data[ 'results' ][ 'bindings' ];
+            $array = null;
 
-            $array = array();
+            if(isset($data['count'])) {
+                $array = $data;
+            }
+            else {
+                $keys = $data[ 'head' ][ 'vars' ];
+                $bindings = $data[ 'results' ][ 'bindings' ];
 
-            foreach( $bindings as $element ) {
-                $object = array();
-                foreach( $keys as $key ) {
-                    $object[ $key ] = $element[ $key ] [ 'value' ];
+                $array = array();
+
+                foreach( $bindings as $element ) {
+                    $object = array();
+                    foreach( $keys as $key ) {
+                        $object[ $key ] = $element[ $key ] [ 'value' ];
+                    }
+                    array_push( $array, $object );
                 }
-                array_push( $array, $object );
             }
             return $array;
         }

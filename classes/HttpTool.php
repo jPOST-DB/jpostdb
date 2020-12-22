@@ -90,7 +90,12 @@
             $total = 0;
             if( $datasets !== 'nothing' ) {
                 $data = SparqlTool::postSparqList( $url, $parameters );
-                $total = intval( $data[ 0 ][ 'line_count' ] );
+                if(isset($data['count'])) {
+                    $total = intval( $data[ 'count' ] );
+                }
+                else {
+                    $total = intval( $data[ 0 ][ 'line_count' ] );
+                }
             }
             $parameters = array();
             self::setTarget( $parameters );
@@ -99,7 +104,12 @@
             $count = 0;
             if( $datasets !== 'nothing' ) {        
                 $data = SparqlTool::postSparqList( $url, $parameters );
-                $count = intval( $data[ 0 ][ 'line_count' ] );
+                if(isset($data['count'])) {
+                    $count = intval( $data['count'] );
+                }
+                else {
+                    $count = intval( $data[ 0 ][ 'line_count' ] );
+                }
             }
             $data = array();
             if( $datasets !== 'nothing' ) {

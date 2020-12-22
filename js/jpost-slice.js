@@ -197,15 +197,14 @@ jpost.addSliceContens = function( slice ) {
     $( '#' + mainId ).append( '<div style="clear: both;"></div>' );
     $( '#' + mainId ).append( '<p>' + slice.description  + '</p>' );
 
-    $( '#' + mainId ).append( '<h3>Slice Table</h3>')
-    $( '#' + mainId ).append( '<div id="' + id + '_slice_table"></div>' );
-
     // $( '#' + mainId ).append( '<h3>Table</h3>' );
     $( '#' + mainId ).append( '<div id="' + id + '_table_slice"></div>' );
     $( '#' + mainId ).append( '<h3>Chromosome Info.</h3>' );
     $( '#' + mainId ).append( '<div id="' + id + '_chromosome"></div>' );
     $( '#' + mainId ).append( '<h3>Protein Existence</h3>' );
     $( '#' + mainId ).append( '<div id="' + id + '_protein"></div>' );
+    $( '#' + mainId ).append( '<h3>Gene Ontology</h3>' );
+    $( '#' + mainId ).append( '<div id="' + id + '_go_count"></div>' );    
     $( '#' + mainId ).append( '<h3>Pathway Mapping</h3>' );
     $( '#' + mainId ).append( '<div id="' + id + '_kegg"></div>' );
     //jpost.loadSliceStanzas( slice );    
@@ -215,8 +214,6 @@ jpost.addSliceContens = function( slice ) {
     tag = '<button id="' + id + '_dataset_tab_button" class="' + id + '_tab_button tab_button tab_active dataset_tab_button">Dataset</button>';
     $( '#' + id + '_tab_buttons' ).append( tag );
     tag = '<button id="' + id + '_protein_tab_button" class="' + id + '_tab_button tab_button protein_tab_button">Protein</button>';
-    $( '#' + id + '_tab_buttons' ).append( tag );
-    tag = '<button id="' + id + '_peptide_tab_button" class="' + id + '_tab_button tab_button peptide_tab_button">Peptide</button>';
     $( '#' + id + '_tab_buttons' ).append( tag );
     $( '#' + id + '_tab_buttons' ).append( '<button class="fill_blank"></button>' );
     $( '#' + id + '_dataset_tab_button' ).click( 
@@ -229,57 +226,14 @@ jpost.addSliceContens = function( slice ) {
             jpost.changeTabPanel( id + '_protein', id );
         }
     );
-    $( '#' + id + '_peptide_tab_button' ).click( 
-        function() {
-            jpost.changeTabPanel( id + '_peptide', id );
-        }
-    );
+
     tag = '<div id="' + id + '_dataset_tab_pane" class="tab_pane ' + id + '_tab_pane">Dataset</div>';
     $( '#' + mainId ).append( tag );
     tag = '<div id="' + id + '_protein_tab_pane" class="tab_pane ' + id + '_tab_pane" style="display: none;">Protein</div>';
     $( '#' + mainId ).append( tag );
-    tag = '<div id="' + id + '_peptide_tab_pane" class="tab_pane ' + id + '_tab_pane" style="display: none;">Peptide</div>';
-    $( '#' + mainId ).append( tag );
 
     jpost.createSliceDatasetTable( slice );
     jpost.createSliceProteinTable( slice );
-    jpost.createSlicePeptideTable( slice );
-
-    jpost.addOptimized(slice);
-}
-
-jpost.addOptimized = function(slice) {
-    var id = 'slice_contents_' + slice.id;
-    var datasets = slice.datasets.join(' ');
-    var url = 'http://localhost:8080/proteins?datasets=' + encodeURI(datasets);
-
-    $.ajax(
-        {
-            url: 'slice_table.php',
-            type: 'GET',
-            data: {
-                datasets: datasets,
-                url: url
-            },
-            dataType: 'json'
-        }
-    ).then(
-        function(response) {
-            console.log(response);
-            var object = JSON.parse(response);
-            var divId = id + '_slice_table';
-            var table = '<table><tr><th>Dataset Count</th><td>' + object.dataset_count + '</td></tr>'
-                        + '<tr><th>Protein Count</th><td>' + object.protein_count + '</td></tr>'
-                        + '<tr><th>Peptide Count</th><td>' + object.peptide_count + '</td></tr>'
-                        + '<tr><th>Unique Peptide Count</th><td>' + object.uniq_pep_count + '</td></tr>'
-                        + '<tr><th>ID</th><td>' + object.id + '</td></tr>'
-                        + '<tr><th>Species</th><td>' + object.species + '</td></tr></table>';
-            $('#' + divId).append(table);
-        },
-        function(jqXHR, status, error) {
-            console.log('error!');
-        }
-    );
 }
 
 // load slice stanzas
@@ -291,28 +245,50 @@ jpost.loadSliceStanzas = function( slice ) {
             name: 'table_slice',
             id: id + '_table_slice',
             data: function() {
-                return { dataset: datasets }
+                return { 
+                    dataset: datasets,
+                    "stanza-style": 1
+                }
             }
         },
         {
             name: 'chromosome_histogram',
             id: id + '_chromosome',
             data: function() {
-                return { dataset: datasets }
+                return { 
+                    dataset: datasets,
+                    "stanza-style": 1
+                 }
             }
         },
         {
             name: 'protein_evidence',
             id: id + '_protein',
             data:  function() {
-                return { dataset: datasets }
+                return {
+                     dataset: datasets,
+                    "stanza-style": 1
+                }
+            }
+        },
+        {
+            name: 'go_count',
+            id: id + '_go_count',
+            data: function() {
+                return {
+                    dataset: datasets,
+                    "stanza-style": 1
+                }
             }
         },
         {
             name: 'kegg_mapping_form',
             id: id + '_kegg',
             data:  function() {
-                return { dataset: datasets }
+                return { 
+                    dataset: datasets,
+                    "stanza-style": 1
+                 }
             }
         }
     ];
@@ -817,7 +793,7 @@ jpost.createSliceProteinTable = function( slice ) {
     table.createTable(
         id,
         {
-            url: 'protein_table.php',
+            url: 'slice_protein_table.php',
             columns: jpost.sliceProteinColumns,
             parameters: function() {
                 return { datasets: slice.datasets };
@@ -828,25 +804,6 @@ jpost.createSliceProteinTable = function( slice ) {
             }
         },
         true
-    );
-}
-
-// create slice peptide table
-jpost.createSlicePeptideTable = function( slice ) {
-    var id = 'slice_contents_' + slice.id + '_peptide_tab_pane';
-    table.createTable(
-        id,
-        {
-            url: 'peptide_table.php',
-            columns: jpost.slicePeptideColumns,
-            parameters: function() {
-                return { datasets: slice.datasets };
-            },
-            countClass: 'peptide_tab_button',
-            countUpdate: function( count ) {
-                return 'Peptide (' + count + ')';
-            }
-        }
     );
 }
 
@@ -903,7 +860,8 @@ jpost.compareSlices = function() {
                             dataset1: slice1.datasets.join( ' ' ),
                             dataset2: slice2.datasets.join( ' ' ),
                             slice1: slice1.name,
-                            slice2: slice2.name
+                            slice2: slice2.name,
+                            "stanza-style": 1
                         };
                     }
                 }

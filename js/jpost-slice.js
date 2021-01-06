@@ -247,7 +247,7 @@ jpost.loadSliceStanzas = function( slice ) {
             data: function() {
                 return { 
                     dataset: datasets,
-                    "stanza-style": 1
+                    "slice_stanza": 1
                 }
             }
         },
@@ -257,7 +257,7 @@ jpost.loadSliceStanzas = function( slice ) {
             data: function() {
                 return { 
                     dataset: datasets,
-                    "stanza-style": 1
+                    "slice_stanza": 1
                  }
             }
         },
@@ -267,7 +267,7 @@ jpost.loadSliceStanzas = function( slice ) {
             data:  function() {
                 return {
                      dataset: datasets,
-                    "stanza-style": 1
+                    "slice_stanza": 1
                 }
             }
         },
@@ -277,7 +277,7 @@ jpost.loadSliceStanzas = function( slice ) {
             data: function() {
                 return {
                     dataset: datasets,
-                    "stanza-style": 1
+                    "slice_stanza": 1
                 }
             }
         },
@@ -287,7 +287,7 @@ jpost.loadSliceStanzas = function( slice ) {
             data:  function() {
                 return { 
                     dataset: datasets,
-                    "stanza-style": 1
+                    "slice_stanza": 1
                  }
             }
         }
